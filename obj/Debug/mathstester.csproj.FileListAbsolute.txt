@@ -1,0 +1,5 @@
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/mathstester.exe
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/mathstester.pdb
+/Users/danyalqureshi/Documents/mathstester/mathstester/obj/Debug/mathstester.csprojAssemblyReference.cache
+/Users/danyalqureshi/Documents/mathstester/mathstester/obj/Debug/mathstester.exe
+/Users/danyalqureshi/Documents/mathstester/mathstester/obj/Debug/mathstester.pdb
