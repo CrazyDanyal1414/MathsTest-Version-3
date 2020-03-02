@@ -14,12 +14,10 @@ namespace mathstester
 
 
             Console.Write("How many questions would you like to answer? ");
-            int numofquestions = Convert.ToInt32(Console.ReadLine());
-            int numofquestionsleft = numofquestions;
+            int numberOfQuestions = Convert.ToInt32(Console.ReadLine());
+            int numberOfQuestionsLeft = numberOfQuestions;
 
-            // This is the loop which handles the actual question/answer core of the game.
-            // Answering a question correctly increases your score.
-            while (numofquestionsleft > 0)
+            while (numberOfQuestionsLeft > 0)
             {
 
                 Console.Write($"What is {num1} * {num2} =");
@@ -34,11 +32,11 @@ namespace mathstester
                 {
                     Console.WriteLine("Your answer is incorrect!");
                 }
-                numofquestionsleft--;
+                numberOfQuestionsLeft--;
                 num1 = rand.Next(21);
                 num2 = rand.Next(21);
             }
-            Console.WriteLine($"You got a score of {mark} out of {numofquestions}");
+            Console.WriteLine($"You got a score of {mark} out of {numberOfQuestions}");
         }
     }
 }
