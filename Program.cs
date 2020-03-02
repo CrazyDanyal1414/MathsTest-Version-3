@@ -21,9 +21,9 @@ namespace mathstester
             {
 
                 Console.Write($"What is {num1} * {num2} =");
-                int realanswer = num1 * num2;
-                int useranswer = Convert.ToInt32(Console.ReadLine());
-                if (realanswer == useranswer)
+                int correctAnswer = num1 * num2;
+                int userAnswer = Convert.ToInt32(Console.ReadLine());
+                if (correctAnswer == userAnswer)
                 {
                     Console.WriteLine("Well Done!");
                     mark++;
