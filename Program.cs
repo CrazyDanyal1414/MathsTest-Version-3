@@ -8,8 +8,8 @@ namespace mathstester
         {
 
             Random rand = new Random();
-            int num1 = rand.Next(11);
-            int num2 = rand.Next(11);
+            int number1 = rand.Next(11);
+            int number2 = rand.Next(11);
             int mark = 0;
 
 
@@ -20,8 +20,8 @@ namespace mathstester
             while (numberOfQuestionsLeft > 0)
             {
 
-                Console.Write($"What is {num1} * {num2} =");
-                int correctAnswer = num1 * num2;
+                Console.Write($"What is {number1} * {number2} =");
+                int correctAnswer = number1 * number2;
                 int userAnswer = Convert.ToInt32(Console.ReadLine());
                 if (correctAnswer == userAnswer)
                 {
@@ -31,10 +31,11 @@ namespace mathstester
                 else
                 {
                     Console.WriteLine("Your answer is incorrect!");
+                    break;
                 }
                 numberOfQuestionsLeft--;
-                num1 = rand.Next(21);
-                num2 = rand.Next(21);
+                number1 = rand.Next(21);
+                number2 = rand.Next(21);
             }
             Console.WriteLine($"You got a score of {mark} out of {numberOfQuestions}");
         }
