@@ -7,10 +7,10 @@ namespace mathstester
         public static void Main(string[] args)
         {
 
-            Random rand = new Random();
-            int number1 = rand.Next(11);
-            int number2 = rand.Next(11);
-            int mark = 0;
+            Random random = new Random();
+            int number1 = random.Next(11);
+            int number2 = random.Next(11);
+            int score = 0;
 
 
             Console.Write("How many questions would you like to answer? ");
@@ -26,18 +26,17 @@ namespace mathstester
                 if (correctAnswer == userAnswer)
                 {
                     Console.WriteLine("Well Done!");
-                    mark++;
+                    score++;
                 }
                 else
                 {
                     Console.WriteLine("Your answer is incorrect!");
-                    break;
                 }
                 numberOfQuestionsLeft--;
-                number1 = rand.Next(21);
-                number2 = rand.Next(21);
+                number1 = random.Next(21);
+                number2 = random.Next(21);
             }
-            Console.WriteLine($"You got a score of {mark} out of {numberOfQuestions}");
+            Console.WriteLine($"You got a score of {score} out of {numberOfQuestions}");
         }
     }
 }
