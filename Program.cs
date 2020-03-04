@@ -77,8 +77,8 @@ namespace mathstester
                 int numberOfHardQuestionsLeft = numberOfHardQuestions;
 
                 Random hardRandom = new Random();
-                int hardNumber1 = hardRandom.Next(1000);
-                int hardNumber2 = hardRandom.Next(1000);
+                int hardNumber1 = hardRandom.Next(10, 1000);
+                int hardNumber2 = hardRandom.Next(10, 1000);
                 int hardScore = 0;
 
                 while (numberOfHardQuestionsLeft > 0)
@@ -96,8 +96,8 @@ namespace mathstester
                         Console.WriteLine("Your answer is incorrect!");
                     }
                     numberOfHardQuestionsLeft--;
-                    hardNumber1 = hardRandom.Next(1000);
-                    hardNumber2 = hardRandom.Next(1000);
+                    hardNumber1 = hardRandom.Next(10, 1000);
+                    hardNumber2 = hardRandom.Next(10, 1000);
                 }
                 Console.WriteLine($"You got a score of {hardScore} out of {numberOfHardQuestions}");
             }
