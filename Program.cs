@@ -6,27 +6,39 @@ namespace mathstester
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
-            string userDifficulty = Console.ReadLine();
+            string userDifficulty = "";
+            do
+            {
+                Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
+                userDifficulty = Console.ReadLine().ToUpper();
+            }while (userDifficulty != "E" && userDifficulty != "N" && userDifficulty != "H");
 
-            Console.Write("How many questions would you like to answer? ");
-            int numberOfQuestions = Convert.ToInt32(Console.ReadLine());
-            int numberOfQuestionsLeft = numberOfQuestions;
+            int numberOfQuestions = 0;
+            int numberOfQuestionsLeft = 0;
+            do
+            {
+                Console.Write("How many questions would you like to answer?Please type a number divisible by 10");
+                int.TryParse(Console.ReadLine(), out numberOfQuestions);
+                numberOfQuestionsLeft = numberOfQuestions;
+            } while (numberOfQuestions % 10 != 0);
 
             Random random = new Random();
+            int easyNumber1 = random.Next(10);
+            int easyNumber2 = random.Next(10);
+            int normalNumber1 = random.Next(100);
+            int normalNumber2 = random.Next(100);
+            int hardNumber1 = random.Next(10, 1000);
+            int hardNumber2 = random.Next(10, 1000);
             int score = 0;
 
             while (numberOfQuestionsLeft > 0)
             {
                 if (userDifficulty == "E")
                 {
-                    int easyNumber1 = random.Next(10);
-                    int easyNumber2 = random.Next(10);
-
                     Console.Write($"What is {easyNumber1} * {easyNumber2} =");
-                    int easyCorrectAnswer = easyNumber1 * easyNumber2;
-                    int easyUserAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (easyCorrectAnswer == easyUserAnswer)
+                    int correctAnswer = easyNumber1 * easyNumber2;
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (correctAnswer == userAnswer)
                     {
                         Console.WriteLine("Well Done!");
                         score++;
@@ -38,17 +50,13 @@ namespace mathstester
                     numberOfQuestionsLeft--;
                     easyNumber1 = random.Next(10);
                     easyNumber2 = random.Next(10);
-
                 }
                 else if (userDifficulty == "N")
                 {
-                    int normalNumber1 = random.Next(100);
-                    int normalNumber2 = random.Next(100);
-
                     Console.Write($"What is {normalNumber1} * {normalNumber2} =");
-                    int normalCorrectAnswer = normalNumber1 * normalNumber2;
-                    int normalUserAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (normalCorrectAnswer == normalUserAnswer)
+                    int correctAnswer = normalNumber1 * normalNumber2;
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (correctAnswer == userAnswer)
                     {
                         Console.WriteLine("Well Done!");
                         score++;
@@ -63,12 +71,10 @@ namespace mathstester
                 }
                 else if (userDifficulty == "H")
                 {
-                    int hardNumber1 = random.Next(10, 1000);
-                    int hardNumber2 = random.Next(10, 1000);
                     Console.Write($"What is {hardNumber1} * {hardNumber2} =");
-                    int hardCorrectAnswer = hardNumber1 * hardNumber2;
-                    int hardUserAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (hardCorrectAnswer == hardUserAnswer)
+                    int correctAnswer = hardNumber1 * hardNumber2;
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (correctAnswer == userAnswer)
                     {
                         Console.WriteLine("Well Done!");
                         score++;
@@ -80,10 +86,6 @@ namespace mathstester
                     numberOfQuestionsLeft--;
                     hardNumber1 = random.Next(10, 1000);
                     hardNumber2 = random.Next(10, 1000);
-                }
-                else
-                {
-                    Console.WriteLine("Sorry, This is not an option");
                 }
             }
             Console.WriteLine($"You got a score of {score} out of {numberOfQuestions}");
