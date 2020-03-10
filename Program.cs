@@ -4,6 +4,12 @@ namespace mathstester
 {
     class Program
     {
+        enum userDifficulty
+        {
+            Easy,
+            Normal,
+            Hard
+        }
         public static void Main(string[] args)
         {
             string userDifficulty = "";
@@ -14,14 +20,13 @@ namespace mathstester
             } while (userDifficulty != "E" && userDifficulty != "N" && userDifficulty != "H");
 
             int numberOfQuestions = 0;
-            int numberOfQuestionsLeft = 0;
             do
             {
                 Console.Write("How many questions would you like to answer? Please type a number divisible by 10!");
                 int.TryParse(Console.ReadLine(), out numberOfQuestions);
-                numberOfQuestionsLeft = numberOfQuestions;
             } while (numberOfQuestions % 10 != 0);
 
+            int numberOfQuestionsLeft = numberOfQuestions;
             Random random = new Random();
             int score = 0;
 
@@ -29,21 +34,20 @@ namespace mathstester
             {
                 int number1 = 0;
                 int number2 = 0;
-
-                if (userDifficulty == "E")
+                switch (userDifficulty)
                 {
-                    number1 = random.Next(10);
-                    number2 = random.Next(10);
-                }
-                else if (userDifficulty == "N")
-                {
-                    number1 = random.Next(100);
-                    number2 = random.Next(100);
-                }
-                else if (userDifficulty == "H")
-                {
-                    number1 = random.Next(10, 1000);
-                    number2 = random.Next(10, 1000);
+                    case "E":
+                        number1 = random.Next(10);
+                        number2 = random.Next(10);
+                        break;
+                    case "N":
+                        number1 = random.Next(100);
+                        number2 = random.Next(100);
+                        break;
+                    case "H":
+                        number1 = random.Next(10, 1000);
+                        number2 = random.Next(10, 1000);
+                        break;
                 }
 
                 Console.Write($"What is {number1} * {number2} =");
