@@ -4,7 +4,7 @@ namespace mathstester
 {
     class Program
     {
-        enum userDifficulty
+        enum UserDifficulty
         {
             Easy,
             Normal,
