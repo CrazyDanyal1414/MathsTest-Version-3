@@ -32,37 +32,172 @@ namespace mathstester
 
             while (numberOfQuestionsLeft > 0)
             {
+                var operation = random.Next(1, 7);
                 int number1 = 0;
                 int number2 = 0;
                 switch (userDifficulty)
                 {
                     case "E":
-                        number1 = random.Next(10);
-                        number2 = random.Next(10);
+                        switch (operation)
+                        {
+                            case 1:
+                                number1 = random.Next(1000);
+                                number2 = random.Next(1000);
+                                break;
+                            case 2:
+                                number1 = random.Next(1000);
+                                number2 = random.Next(1000);
+                                break;
+                            case 3:
+                                number1 = random.Next(13);
+                                number2 = random.Next(13);
+                                break;
+
+                        }
                         break;
                     case "N":
-                        number1 = random.Next(100);
-                        number2 = random.Next(100);
+                        switch (operation)
+                        {
+                            case 1:
+                                number1 = random.Next(1000);
+                                number2 = random.Next(1000);
+                                break;
+                            case 2:
+                                number1 = random.Next(1000);
+                                number2 = random.Next(1000);
+                                break;
+                            case 3:
+                                number1 = random.Next(1000);
+                                number2 = random.Next(1000);
+                                break;
+                            case 4:
+                                number1 = random.Next(1, 10000);
+                                number2 = random.Next(1, 1000);
+                                break;
+
+                        }
                         break;
                     case "H":
-                        number1 = random.Next(10, 1000);
-                        number2 = random.Next(10, 1000);
+                        switch (operation)
+                        {
+                            case 3:
+                                number1 = random.Next(1000);
+                                number2 = random.Next(1000);
+                                break;
+                            case 4:
+                                number1 = random.Next(1, 10000);
+                                number2 = random.Next(1, 1000);
+                                break;
+                            case 5:
+                                number1 = random.Next(13);
+                                number2 = random.Next(5);
+                                break;
+                            case 6:
+                                number1 = random.Next(1000);
+                                break;
+
+                        }
                         break;
                 }
 
-                Console.Write($"What is {number1} * {number2} =");
-                int correctAnswer = number1 * number2;
-                int userAnswer = Convert.ToInt32(Console.ReadLine());
-                if (correctAnswer == userAnswer)
+                if(operation == 1 && (userDifficulty == "E" || userDifficulty == "N"))
                 {
-                    Console.WriteLine("Well Done!");
-                    score++;
+                    Console.Write($"What is {number1} + {number2} =");
+                    int correctAnswer = number1 + number2;
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (correctAnswer == userAnswer)
+                    {
+                        Console.WriteLine("Well Done!");
+                        score++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your answer is incorrect!");
+                    }
+                    numberOfQuestionsLeft--;
                 }
-                else
+                else if (operation == 2 && (userDifficulty == "E" || userDifficulty == "N"))
                 {
-                    Console.WriteLine("Your answer is incorrect!");
+                    Console.Write($"What is {number1} - {number2} =");
+                    int correctAnswer = number1 - number2;
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (correctAnswer == userAnswer)
+                    {
+                        Console.WriteLine("Well Done!");
+                        score++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your answer is incorrect!");
+                    }
+                    numberOfQuestionsLeft--;
                 }
-                numberOfQuestionsLeft--;
+                else if (operation == 3 && (userDifficulty == "E" || userDifficulty == "N" || userDifficulty == "H"))
+                {
+                    Console.Write($"What is {number1} * {number2} =");
+                    int correctAnswer = number1 * number2;
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (correctAnswer == userAnswer)
+                    {
+                        Console.WriteLine("Well Done!");
+                        score++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your answer is incorrect!");
+                    }
+                    numberOfQuestionsLeft--;
+                }
+                else if (operation == 4 && (userDifficulty == "N" || userDifficulty == "H") && (number1 > number2))
+                {
+                    Console.Write($"To the nearest integer, What is {number1} / {number2} =");
+                    double correctAnswer = number1 / number2;
+                    double roundedCorrectAnser = Math.Round(correctAnswer);
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (roundedCorrectAnser == userAnswer)
+                    {
+                        Console.WriteLine("Well Done!");
+                        score++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your answer is incorrect!");
+                    }
+                    numberOfQuestionsLeft--;
+                }
+                else if (operation == 5 && userDifficulty == "H")
+                {
+                    Console.Write($"To the nearest integer, What is {number1} ^ {number2} =");
+                    double correctAnswer = Math.Pow(number1, number2);
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (correctAnswer == userAnswer)
+                    {
+                        Console.WriteLine("Well Done!");
+                        score++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your answer is incorrect!");
+                    }
+                    numberOfQuestionsLeft--;
+                }
+                else if (operation == 6 && userDifficulty == "H")
+                {
+                    Console.Write($"To the nearest integer, What is √{number1} =");
+                    double correctAnswer = Math.Sqrt(number1);
+                    double roundedCorrectAnser = Math.Round(correctAnswer);
+                    int userAnswer = Convert.ToInt32(Console.ReadLine());
+                    if (roundedCorrectAnser == userAnswer)
+                    {
+                        Console.WriteLine("Well Done!");
+                        score++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your answer is incorrect!");
+                    }
+                    numberOfQuestionsLeft--;
+                }
             }
             Console.WriteLine($"You got a score of {score} out of {numberOfQuestions}");
         }
