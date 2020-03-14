@@ -151,10 +151,10 @@ namespace mathstester
                 else if (operation == 4 && (userDifficulty == "N" || userDifficulty == "H") && (number1 > number2))
                 {
                     Console.Write($"To the nearest integer, What is {number1} / {number2} =");
-                    double correctAnswer = number1 / number2;
-                    double roundedCorrectAnser = Math.Round(correctAnswer);
+                    double correctAnswer = ((double)number1) / ((double)number2);
+                    double roundedCorrectAnswer = Math.Round(correctAnswer);
                     int userAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (roundedCorrectAnser == userAnswer)
+                    if (roundedCorrectAnswer == userAnswer)
                     {
                         Console.WriteLine("Well Done!");
                         score++;
@@ -167,7 +167,7 @@ namespace mathstester
                 }
                 else if (operation == 5 && userDifficulty == "H")
                 {
-                    Console.Write($"To the nearest integer, What is {number1} ^ {number2} =");
+                    Console.Write($"What is {number1} ^ {number2} =");
                     double correctAnswer = Math.Pow(number1, number2);
                     int userAnswer = Convert.ToInt32(Console.ReadLine());
                     if (correctAnswer == userAnswer)
@@ -185,9 +185,9 @@ namespace mathstester
                 {
                     Console.Write($"To the nearest integer, What is √{number1} =");
                     double correctAnswer = Math.Sqrt(number1);
-                    double roundedCorrectAnser = Math.Round(correctAnswer);
+                    double roundedCorrectAnswer = Math.Round(correctAnswer);
                     int userAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (roundedCorrectAnser == userAnswer)
+                    if (roundedCorrectAnswer == userAnswer)
                     {
                         Console.WriteLine("Well Done!");
                         score++;
