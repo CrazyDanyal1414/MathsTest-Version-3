@@ -29,176 +29,107 @@ namespace mathstester
             int numberOfQuestionsLeft = numberOfQuestions;
             Random random = new Random();
             int score = 0;
+            int operationMin = 0;
+            int operationMax = 0;
+
+            switch (userDifficulty)
+            {
+                case "E":
+                    operationMin = 1;
+                    operationMax = 4;
+                    break;
+                case "N":
+                    operationMin = 1;
+                    operationMax = 5;
+                    break;
+                case "H":
+                    operationMin = 3;
+                    operationMax = 7;
+                    break;
+            }
 
             while (numberOfQuestionsLeft > 0)
             {
-                var operation = random.Next(1, 7);
-                int number1 = 0;
-                int number2 = 0;
-                switch (userDifficulty)
+                var operation = random.Next(operationMin, operationMax); 
+                double number1 = 0;
+                double number2 = 0;
+                double correctAnswer = 0;
+                double userAnswer;
+
+                string message = "";
+
+                switch (operation)
                 {
-                    case "E":
-                        switch (operation)
-                        {
-                            case 1:
-                                number1 = random.Next(1000);
-                                number2 = random.Next(1000);
-                                break;
-                            case 2:
-                                number1 = random.Next(1000);
-                                number2 = random.Next(1000);
-                                break;
-                            case 3:
-                                number1 = random.Next(13);
-                                number2 = random.Next(13);
-                                break;
-
-                        }
+                    case 1:
+                        number1 = random.Next(1000);
+                        number2 = random.Next(1000);
+                        correctAnswer = number1 + number2;
+                        message = $"{number1} + {number2}";
                         break;
-                    case "N":
-                        switch (operation)
-                        {
-                            case 1:
-                                number1 = random.Next(1000);
-                                number2 = random.Next(1000);
-                                break;
-                            case 2:
-                                number1 = random.Next(1000);
-                                number2 = random.Next(1000);
-                                break;
-                            case 3:
-                                number1 = random.Next(1000);
-                                number2 = random.Next(1000);
-                                break;
-                            case 4:
-                                number1 = random.Next(1, 10000);
-                                number2 = random.Next(1, 1000);
-                                break;
-
-                        }
+                    case 2:
+                        number1 = random.Next(1000);
+                        number2 = random.Next(1000);
+                        correctAnswer = number1 - number2;
+                        message = $"{number1} - {number2}";
                         break;
-                    case "H":
-                        switch (operation)
+                    case 3:
+                        if(userDifficulty == "E")
                         {
-                            case 3:
-                                number1 = random.Next(1000);
-                                number2 = random.Next(1000);
-                                break;
-                            case 4:
-                                number1 = random.Next(1, 10000);
-                                number2 = random.Next(1, 1000);
-                                break;
-                            case 5:
-                                number1 = random.Next(13);
-                                number2 = random.Next(5);
-                                break;
-                            case 6:
-                                number1 = random.Next(1000);
-                                break;
-
+                            number1 = random.Next(13);
+                            number2 = random.Next(13);
                         }
+                        else
+                        {
+                            number1 = random.Next(1000);
+                            number2 = random.Next(1000);
+                        }
+                        correctAnswer = number1 * number2;
+                        message = $"{number1} * {number2}";
+                        break;
+                    case 4:
+                        number1 = random.Next(1, 10000);
+                        number2 = random.Next(1, 1000);
+                        correctAnswer = number1 / number2;
+                        message = $"{number1} / {number2}";
+                        break;
+                    case 5:
+                        number1 = random.Next(13);
+                        number2 = random.Next(5);
+                        correctAnswer = Math.Pow(number1, number2);
+                        message = $"{number1} ^ {number2}";
+                        break;
+                    case 6:
+                        number1 = random.Next(1000);
+                        correctAnswer = Math.Sqrt(number1);
+                        message = $"√{number1}";
                         break;
                 }
 
-                if(operation == 1 && (userDifficulty == "E" || userDifficulty == "N"))
+
+                if (operation == 4 || operation == 6)
                 {
-                    Console.Write($"What is {number1} + {number2} =");
-                    int correctAnswer = number1 + number2;
-                    int userAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (correctAnswer == userAnswer)
-                    {
-                        Console.WriteLine("Well Done!");
-                        score++;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Your answer is incorrect!");
-                    }
-                    numberOfQuestionsLeft--;
+                    Console.Write($"To the nearest integer, What is {message} =");
                 }
-                else if (operation == 2 && (userDifficulty == "E" || userDifficulty == "N"))
+                else
                 {
-                    Console.Write($"What is {number1} - {number2} =");
-                    int correctAnswer = number1 - number2;
-                    int userAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (correctAnswer == userAnswer)
-                    {
-                        Console.WriteLine("Well Done!");
-                        score++;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Your answer is incorrect!");
-                    }
-                    numberOfQuestionsLeft--;
+                    Console.Write($"What is {message} =");
                 }
-                else if (operation == 3 && (userDifficulty == "E" || userDifficulty == "N" || userDifficulty == "H"))
+
+                userAnswer = Convert.ToDouble(Console.ReadLine());
+
+                if (Math.Round(correctAnswer) == userAnswer)
                 {
-                    Console.Write($"What is {number1} * {number2} =");
-                    int correctAnswer = number1 * number2;
-                    int userAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (correctAnswer == userAnswer)
-                    {
-                        Console.WriteLine("Well Done!");
-                        score++;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Your answer is incorrect!");
-                    }
-                    numberOfQuestionsLeft--;
+                    Console.WriteLine("Well Done!");
+                    score++;
                 }
-                else if (operation == 4 && (userDifficulty == "N" || userDifficulty == "H") && (number1 > number2))
+                else
                 {
-                    Console.Write($"To the nearest integer, What is {number1} / {number2} =");
-                    double correctAnswer = ((double)number1) / ((double)number2);
-                    double roundedCorrectAnswer = Math.Round(correctAnswer);
-                    int userAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (roundedCorrectAnswer == userAnswer)
-                    {
-                        Console.WriteLine("Well Done!");
-                        score++;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Your answer is incorrect!");
-                    }
-                    numberOfQuestionsLeft--;
+                    Console.WriteLine("Your answer is incorrect!");
                 }
-                else if (operation == 5 && userDifficulty == "H")
-                {
-                    Console.Write($"What is {number1} ^ {number2} =");
-                    double correctAnswer = Math.Pow(number1, number2);
-                    int userAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (correctAnswer == userAnswer)
-                    {
-                        Console.WriteLine("Well Done!");
-                        score++;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Your answer is incorrect!");
-                    }
-                    numberOfQuestionsLeft--;
-                }
-                else if (operation == 6 && userDifficulty == "H")
-                {
-                    Console.Write($"To the nearest integer, What is √{number1} =");
-                    double correctAnswer = Math.Sqrt(number1);
-                    double roundedCorrectAnswer = Math.Round(correctAnswer);
-                    int userAnswer = Convert.ToInt32(Console.ReadLine());
-                    if (roundedCorrectAnswer == userAnswer)
-                    {
-                        Console.WriteLine("Well Done!");
-                        score++;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Your answer is incorrect!");
-                    }
-                    numberOfQuestionsLeft--;
-                }
+                numberOfQuestionsLeft--;
+
             }
+
             Console.WriteLine($"You got a score of {score} out of {numberOfQuestions}");
         }
     }
