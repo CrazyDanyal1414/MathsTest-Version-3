@@ -4,14 +4,14 @@ namespace mathstester
 {
     class Program
     {
-		enum UserDifficulty
+		public enum UserDifficulty
 		{
 			Easy,
 			Normal,
 			Hard
 		}
 
-		enum MathOperation
+		public enum MathOperation
 		{
 			Addition = 1,
 			Subtraction = 2,
@@ -20,68 +20,91 @@ namespace mathstester
 			Power = 5,
 			SquareRoot = 6
 		}
-
-		public static (int operationMin, int operationMax) GetDifficulty(string input)
+		public static (int operationMin, int operationMax) GetMathOperationForDifferentDifficulties(UserDifficulty userDifficulty)
 		{
-			switch (input)
+
+            switch (userDifficulty)
 			{
-				case "E":
+				case UserDifficulty.Easy:
 					return (1, 4);
-				case "N":
+				case UserDifficulty.Normal:
 					return (1, 5);
-				case "H":
+				case UserDifficulty.Hard:
 					return (3, 7);
 				default:
 					throw new Exception();
 			}
 		}
-
-		public static (string message, double correctAnswer) Calculation(int mathOperation, string userDifficulty)
+		public static (string message, double correctAnswer) GetMathsEquation(MathOperation mathOperation, UserDifficulty userDifficulty)
 		{
-			int number1;
+            int number1;
 			int number2;
-			Random random = new Random();
+			Random randomNumber = new Random();
 
 			switch (mathOperation)
 			{
-				case 1:
-					number1 = random.Next(1000);
-					number2 = random.Next(1000);
+				case MathOperation.Addition:
+					number1 = randomNumber.Next(1000);
+					number2 = randomNumber.Next(1000);
 					return ($"{number1} + {number2}", number1 + number2);
-				case 2:
-					number1 = random.Next(1000);
-					number2 = random.Next(1000);
+				case MathOperation.Subtraction:
+					number1 = randomNumber.Next(1000);
+					number2 = randomNumber.Next(1000);
 					return ($"{number1} - {number2}", number1 - number2);
-				case 3:
-					number1 = userDifficulty == "E" ? random.Next(13) : random.Next(1000);
-					number2 = userDifficulty == "E" ? random.Next(13) : random.Next(1000);
+				case MathOperation.Multiplication:
+					number1 = userDifficulty == UserDifficulty.Easy ? randomNumber.Next(13) : randomNumber.Next(1000);
+					number2 = userDifficulty == UserDifficulty.Easy ? randomNumber.Next(13) : randomNumber.Next(1000);
 					return ($"{number1} * {number2}", number1 * number2);
-				case 4:
-					number1 = random.Next(10000);
-					number2 = random.Next(1000);
+				case MathOperation.Division:
+					number1 = randomNumber.Next(10000);
+					number2 = randomNumber.Next(1000);
 					return ($"{number1} / {number2}", number1 / (double)number2);
-				case 5:
-					number1 = random.Next(13);
-					number2 = random.Next(5);
+				case MathOperation.Power:
+					number1 = randomNumber.Next(13);
+					number2 = randomNumber.Next(5);
 					return ($"{number1} ^ {number2}", Math.Pow(number1, number2));
-				case 6:
-					number1 = random.Next(1000);
+				case MathOperation.SquareRoot:
+					number1 = randomNumber.Next(1000);
 					return ($"√{number1}", Math.Sqrt(number1));
 				default:
 					throw new Exception();
 			}
 		}
 
-		public static int GetResult(int numberOfQuestionsLeft, string userDifficulty)
+		public static int GetResult(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
 		{
 			int score = 0;
 			Random random = new Random();
-			var (operationMin, operationMax) = GetDifficulty(userDifficulty);
+			var (operationMin, operationMax) = GetMathOperationForDifferentDifficulties(userDifficulty);
 			while (numberOfQuestionsLeft > 0)
 			{
-				int mathOperation = random.Next(operationMin, operationMax);
-				var (message, correctAnswer) = Calculation(mathOperation, userDifficulty);
-				if (mathOperation == 4 || mathOperation == 6)
+				MathOperation mathOperation = MathOperation.Addition;
+                int mathRandomOperation = random.Next(operationMin, operationMax);
+
+                switch (mathRandomOperation)
+                {
+					case 1:
+						mathOperation = MathOperation.Addition;
+						break;
+					case 2:
+						mathOperation = MathOperation.Subtraction;
+						break;
+					case 3:
+						mathOperation = MathOperation.Multiplication;
+						break;
+					case 4:
+						mathOperation = MathOperation.Division;
+						break;
+					case 5:
+						mathOperation = MathOperation.Power;
+						break;
+					case 6:
+						mathOperation = MathOperation.SquareRoot;
+						break;
+				}
+
+				var (message, correctAnswer) = GetMathsEquation(mathOperation, userDifficulty);
+				if (mathRandomOperation == 4 || mathRandomOperation == 6)
 				{
 					Console.Write($"To the nearest integer, What is {message} =");
 				}
@@ -107,12 +130,26 @@ namespace mathstester
 
 		public static void Main(string[] args)
 		{
-			string userDifficulty = "";
+			string userInputDifficulty = "";
+			UserDifficulty userDifficulty = UserDifficulty.Easy;
 			do
 			{
 				Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
-				userDifficulty = Console.ReadLine().ToUpper();
-			} while (userDifficulty != "E" && userDifficulty != "N" && userDifficulty != "H");
+				userInputDifficulty = Console.ReadLine().ToUpper();
+			} while (userInputDifficulty != "E" && userInputDifficulty != "N" && userInputDifficulty != "H");
+
+			switch (userInputDifficulty)
+			{
+				case "E":
+					userDifficulty = UserDifficulty.Easy;
+					break;
+				case "N":
+					userDifficulty = UserDifficulty.Normal;
+					break;
+				case "H":
+					userDifficulty = UserDifficulty.Hard;
+					break;
+			}
 
 			int numberOfQuestions = 0;
 			do
