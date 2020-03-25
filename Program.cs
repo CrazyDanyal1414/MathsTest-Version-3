@@ -20,7 +20,7 @@ namespace mathstester
 			Power = 5,
 			SquareRoot = 6
 		}
-		public static (int operationMin, int operationMax) GetMathOperationForDifferentDifficulties(UserDifficulty userDifficulty)
+		public static (int operationMin, int operationMax) GetPossibleOperationsByDifficulty(UserDifficulty userDifficulty)
 		{
 
             switch (userDifficulty)
@@ -75,7 +75,7 @@ namespace mathstester
 		{
 			int score = 0;
 			Random random = new Random();
-			var (operationMin, operationMax) = GetMathOperationForDifferentDifficulties(userDifficulty);
+			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
 			while (numberOfQuestionsLeft > 0)
 			{
 				MathOperation mathOperation = MathOperation.Addition;

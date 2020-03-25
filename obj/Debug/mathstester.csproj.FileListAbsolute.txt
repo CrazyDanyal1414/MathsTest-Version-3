@@ -3,3 +3,4 @@
 /Users/danyalqureshi/Documents/mathstester/mathstester/obj/Debug/mathstester.csprojAssemblyReference.cache
 /Users/danyalqureshi/Documents/mathstester/mathstester/obj/Debug/mathstester.exe
 /Users/danyalqureshi/Documents/mathstester/mathstester/obj/Debug/mathstester.pdb
+/Users/danyalqureshi/Documents/mathstester/mathstester/obj/Debug/mathstester.csproj.CoreCompileInputs.cache
