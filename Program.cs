@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace mathstester
 {
     class Program
     {
-		public enum UserDifficulty
+        public enum UserDifficulty
 		{
 			Easy,
 			Normal,
@@ -37,7 +38,8 @@ namespace mathstester
 		}
 		public static (string message, double correctAnswer) GetMathsEquation(MathOperation mathOperation, UserDifficulty userDifficulty)
 		{
-            int number1;
+
+		    int number1;
 			int number2;
 			Random randomNumber = new Random();
 
@@ -71,38 +73,38 @@ namespace mathstester
 			}
 		}
 
-		public static int GetResult(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+        public class OperationQuestionScore
 		{
-			int score = 0;
+			public int additionQuestion { get; set; }
+			public int additionScore { get; set; }
+			public int subtractionQuestion { get; set; }
+			public int subtractionScore { get; set; }
+			public int multiplicationQuestion { get; set; }
+			public int multiplicationScore { get; set; }
+			public int divisionQuestion { get; set; }
+			public int divisionScore { get; set; }
+			public int powerQuestion { get; set; }
+			public int powerScore { get; set; }
+			public int squareRootQuestion { get; set; }
+			public int squareRootScore { get; set; }
+		}
+
+		public static OperationQuestionScore Score()
+        {
+			return new OperationQuestionScore();
+		}
+
+		public static (int, OperationQuestionScore) RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+		{
+            int totalScore = 0;
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
+			var score = Score();
+
 			while (numberOfQuestionsLeft > 0)
 			{
-				MathOperation mathOperation = MathOperation.Addition;
-                int mathRandomOperation = random.Next(operationMin, operationMax);
-
-                switch (mathRandomOperation)
-                {
-					case 1:
-						mathOperation = MathOperation.Addition;
-						break;
-					case 2:
-						mathOperation = MathOperation.Subtraction;
-						break;
-					case 3:
-						mathOperation = MathOperation.Multiplication;
-						break;
-					case 4:
-						mathOperation = MathOperation.Division;
-						break;
-					case 5:
-						mathOperation = MathOperation.Power;
-						break;
-					case 6:
-						mathOperation = MathOperation.SquareRoot;
-						break;
-				}
-
+				int mathRandomOperation = random.Next(operationMin, operationMax);
+				MathOperation mathOperation = (MathOperation)mathRandomOperation;
 				var (message, correctAnswer) = GetMathsEquation(mathOperation, userDifficulty);
 				if (mathRandomOperation == 4 || mathRandomOperation == 6)
 				{
@@ -116,40 +118,85 @@ namespace mathstester
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.WriteLine("Well Done!");
-					score++;
+                    if (mathRandomOperation == 1)
+                    {
+						score.additionQuestion++;
+						score.additionScore++;
+					}
+					else if (mathRandomOperation == 2)
+					{
+						score.subtractionQuestion++;
+						score.subtractionScore++;
+					}
+					else if (mathRandomOperation == 3)
+					{
+						score.multiplicationQuestion++;
+						score.multiplicationScore++;
+					}
+					else if (mathRandomOperation == 4)
+					{
+						score.divisionQuestion++;
+						score.divisionScore++;
+					}
+					else if (mathRandomOperation == 5)
+					{
+						score.powerQuestion++;
+						score.powerScore++;
+					}
+                    else
+                    {
+						score.squareRootQuestion++;
+						score.squareRootScore++;
+                    }
+					totalScore++;
 				}
 				else
 				{
 					Console.WriteLine("Your answer is incorrect!");
+					if (mathRandomOperation == 1)
+					{
+						score.additionQuestion++;
+					}
+					else if (mathRandomOperation == 2)
+					{
+						score.subtractionQuestion++;
+					}
+					else if (mathRandomOperation == 3)
+					{
+						score.multiplicationQuestion++;
+					}
+					else if (mathRandomOperation == 4)
+					{
+						score.divisionQuestion++;
+					}
+					else if (mathRandomOperation == 5)
+					{
+						score.powerQuestion++;
+					}
+					else
+					{
+						score.squareRootQuestion++;
+					}
 				}
 				numberOfQuestionsLeft--;
 			}
-
-			return score;
+			return (totalScore, score);
 		}
-
 		public static void Main(string[] args)
 		{
+			Dictionary<string, UserDifficulty> dict = new Dictionary<string, UserDifficulty>();
+			dict.Add("E", UserDifficulty.Easy);
+			dict.Add("N", UserDifficulty.Normal);
+			dict.Add("H", UserDifficulty.Hard);
+
 			string userInputDifficulty = "";
-			UserDifficulty userDifficulty = UserDifficulty.Easy;
 			do
 			{
 				Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
 				userInputDifficulty = Console.ReadLine().ToUpper();
 			} while (userInputDifficulty != "E" && userInputDifficulty != "N" && userInputDifficulty != "H");
 
-			switch (userInputDifficulty)
-			{
-				case "E":
-					userDifficulty = UserDifficulty.Easy;
-					break;
-				case "N":
-					userDifficulty = UserDifficulty.Normal;
-					break;
-				case "H":
-					userDifficulty = UserDifficulty.Hard;
-					break;
-			}
+			UserDifficulty userDifficulty = dict[userInputDifficulty];
 
 			int numberOfQuestions = 0;
 			do
@@ -158,8 +205,29 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			int score = GetResult(numberOfQuestions, userDifficulty);
-			Console.WriteLine($"You got a score of {score} out of {numberOfQuestions}");
+			var (totalScore, score) = RunTest(numberOfQuestions, userDifficulty);
+			Console.WriteLine($"You got a score of {totalScore} out of {numberOfQuestions}");
+
+			if (userDifficulty == UserDifficulty.Easy)
+			{
+				Console.WriteLine($"You got an addition score of {score.additionScore} out of {score.additionQuestion}");
+				Console.WriteLine($"You got an subtraction score of {score.subtractionScore} out of {score.subtractionQuestion}");
+				Console.WriteLine($"You got a multiplication score of {score.multiplicationScore} out of {score.multiplicationQuestion}");
+			}
+			else if (userDifficulty == UserDifficulty.Normal)
+			{
+				Console.WriteLine($"You got an addition score of {score.additionScore} out of {score.additionQuestion}");
+				Console.WriteLine($"You got a subtraction score of {score.subtractionScore} out of {score.subtractionQuestion}");
+				Console.WriteLine($"You got a multiplication score of {score.multiplicationScore} out of {score.multiplicationQuestion}");
+				Console.WriteLine($"You got a division score of {score.divisionScore} out of {score.divisionQuestion}");
+			}
+			else if (userDifficulty == UserDifficulty.Hard)
+			{
+				Console.WriteLine($"You got a multipication score of {score.multiplicationScore} out of {score.multiplicationQuestion}");
+				Console.WriteLine($"You got a division score of {score.divisionScore} out of {score.divisionQuestion}");
+				Console.WriteLine($"You got a power score of {score.powerScore} out of {score.powerQuestion}");
+				Console.WriteLine($"You got a squareroot score of {score.squareRootScore} out of {score.subtractionQuestion}");
+			}
 		}
 	}
 }
