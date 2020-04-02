@@ -114,63 +114,52 @@ namespace mathstester
 				{
 					Console.Write($"What is {message} =");
 				}
+
+				Action<OperationQuestionScore> incrementOperationQuestion;
+				Action<OperationQuestionScore> incrementOperationScore;
+				switch (mathOperation)
+				{
+					case MathOperation.Addition:
+						incrementOperationQuestion = incrementquestion => incrementquestion.AdditionQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.AdditionScore++;
+						break;
+					case MathOperation.Subtraction:
+						incrementOperationQuestion = incrementquestion => incrementquestion.SubtractionQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.SubtractionScore++;
+						break;
+					case MathOperation.Multiplication:
+						incrementOperationQuestion = incrementquestion => incrementquestion.MultiplicationQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.MultiplicationScore++;
+						break;
+					case MathOperation.Division:
+						incrementOperationQuestion = incrementquestion => incrementquestion.DivisionQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.DivisionScore++;
+						break;
+					case MathOperation.Power:
+						incrementOperationQuestion = incrementquestion => incrementquestion.PowerQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.PowerScore++;
+						break;
+					case MathOperation.SquareRoot:
+						incrementOperationQuestion = incrementquestion => incrementquestion.SquareRootQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.SquareRootScore++;
+						break;
+					default:
+						incrementOperationQuestion = _ => { };
+						incrementOperationScore = _ => { };
+						break;
+				}
 				double userAnswer = Convert.ToDouble(Console.ReadLine());
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.WriteLine("Well Done!");
-                    switch (mathOperation)
-                    {
-						case MathOperation.Addition:
-							question.AdditionQuestion++;
-							score.AdditionScore++;
-							break;
-						case MathOperation.Subtraction:
-							question.SubtractionQuestion++;
-							score.SubtractionScore++;
-							break;
-						case MathOperation.Multiplication:
-							question.MultiplicationQuestion++;
-							score.MultiplicationScore++;
-							break;
-						case MathOperation.Division:
-							question.DivisionQuestion++;
-							score.DivisionScore++;
-							break;
-						case MathOperation.Power:
-							question.PowerQuestion++;
-							score.PowerScore++;
-							break;
-						case MathOperation.SquareRoot:
-							question.SquareRootQuestion++;
-							score.SquareRootScore++;
-							break;
-					}
-                    totalScore++;
+					incrementOperationQuestion(question);
+					incrementOperationScore(score);
+					totalScore++;
 				}
 				else
 				{
 					Console.WriteLine("Your answer is incorrect!");
-					switch (mathOperation)
-					{
-						case MathOperation.Addition:
-							question.AdditionQuestion++;
-							break;
-						case MathOperation.Subtraction:
-							question.SubtractionQuestion++;
-							break;
-						case MathOperation.Multiplication:
-							question.MultiplicationQuestion++;
-							break;
-						case MathOperation.Division:
-							question.DivisionQuestion++;
-							break;
-						case MathOperation.Power:
-							question.PowerQuestion++;
-							break;
-						case MathOperation.SquareRoot:
-							question.SquareRootQuestion++;
-							break;
-					}
+					incrementOperationQuestion(question);
 				}
 				numberOfQuestionsLeft--;
 			}
