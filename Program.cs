@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace mathstester
 {
@@ -14,7 +16,7 @@ namespace mathstester
 
 		public enum MathOperation
 		{
-			Addition = 1,
+            Addition = 1,
 			Subtraction = 2,
 			Multiplication = 3,
 			Division = 4,
@@ -51,6 +53,42 @@ namespace mathstester
 			public int PowerScore { get; set; }
 			public int SquareRootQuestion { get; set; }
 			public int SquareRootScore { get; set; }
+
+			public static (Action<OperationQuestionScore>, Action<OperationQuestionScore>) Scores(MathOperation mathOperation)
+			{
+				Action<OperationQuestionScore> incrementOperationQuestion;
+				Action<OperationQuestionScore> incrementOperationScore;
+				switch (mathOperation)
+				{
+                    case MathOperation.Addition:
+						incrementOperationQuestion = incrementquestion => incrementquestion.AdditionQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.AdditionScore++;
+						break;
+					case MathOperation.Subtraction:
+						incrementOperationQuestion = incrementquestion => incrementquestion.SubtractionQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.SubtractionScore++;
+						break;
+					case MathOperation.Multiplication:
+						incrementOperationQuestion = incrementquestion => incrementquestion.MultiplicationQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.MultiplicationScore++;
+						break;
+					case MathOperation.Division:
+						incrementOperationQuestion = incrementquestion => incrementquestion.DivisionQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.DivisionScore++;
+						break;
+					case MathOperation.Power:
+						incrementOperationQuestion = incrementquestion => incrementquestion.PowerQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.PowerScore++;
+						break;
+					case MathOperation.SquareRoot:
+						incrementOperationQuestion = incrementquestion => incrementquestion.SquareRootQuestion++;
+						incrementOperationScore = incrementscore => incrementscore.SquareRootScore++;
+						break;
+					default:
+						throw new Exception();
+				}
+				return (incrementOperationQuestion, incrementOperationScore);
+			}
 		}
 
 		public static OperationQuestionScore Score()
@@ -115,39 +153,8 @@ namespace mathstester
 					Console.Write($"What is {message} =");
 				}
 
-				Action<OperationQuestionScore> incrementOperationQuestion;
-				Action<OperationQuestionScore> incrementOperationScore;
-				switch (mathOperation)
-				{
-					case MathOperation.Addition:
-						incrementOperationQuestion = incrementquestion => incrementquestion.AdditionQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.AdditionScore++;
-						break;
-					case MathOperation.Subtraction:
-						incrementOperationQuestion = incrementquestion => incrementquestion.SubtractionQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.SubtractionScore++;
-						break;
-					case MathOperation.Multiplication:
-						incrementOperationQuestion = incrementquestion => incrementquestion.MultiplicationQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.MultiplicationScore++;
-						break;
-					case MathOperation.Division:
-						incrementOperationQuestion = incrementquestion => incrementquestion.DivisionQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.DivisionScore++;
-						break;
-					case MathOperation.Power:
-						incrementOperationQuestion = incrementquestion => incrementquestion.PowerQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.PowerScore++;
-						break;
-					case MathOperation.SquareRoot:
-						incrementOperationQuestion = incrementquestion => incrementquestion.SquareRootQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.SquareRootScore++;
-						break;
-					default:
-						incrementOperationQuestion = _ => { };
-						incrementOperationScore = _ => { };
-						break;
-				}
+				var (incrementOperationQuestion, incrementOperationScore) = OperationQuestionScore.Scores(mathOperation);
+
 				double userAnswer = Convert.ToDouble(Console.ReadLine());
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
