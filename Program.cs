@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace mathstester
 {
@@ -179,7 +177,7 @@ namespace mathstester
 			difficultyDictionary.Add("N", UserDifficulty.Normal);
 			difficultyDictionary.Add("H", UserDifficulty.Hard);
 
-			string userInputDifficulty = "";
+			string userInputDifficulty;
 			do
 			{
 				Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
@@ -188,7 +186,7 @@ namespace mathstester
 
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 
-			int numberOfQuestions = 0;
+			int numberOfQuestions;
 			do
 			{
 				Console.WriteLine("How many questions would you like to answer? Please type a number divisible by 10!");
