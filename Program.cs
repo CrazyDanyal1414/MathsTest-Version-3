@@ -51,47 +51,49 @@ namespace mathstester
 			public int PowerScore { get; set; }
 			public int SquareRootQuestion { get; set; }
 			public int SquareRootScore { get; set; }
+		    Action<OperationQuestionScore> incrementOperationQuestion;
+			Action<OperationQuestionScore> incrementOperationScore;
 
-			public static (Action<OperationQuestionScore>, Action<OperationQuestionScore>) Scores(MathOperation mathOperation)
+			public void Addition()
 			{
-				Action<OperationQuestionScore> incrementOperationQuestion;
-				Action<OperationQuestionScore> incrementOperationScore;
-				switch (mathOperation)
-				{
-                    case MathOperation.Addition:
-						incrementOperationQuestion = incrementquestion => incrementquestion.AdditionQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.AdditionScore++;
-						break;
-					case MathOperation.Subtraction:
-						incrementOperationQuestion = incrementquestion => incrementquestion.SubtractionQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.SubtractionScore++;
-						break;
-					case MathOperation.Multiplication:
-						incrementOperationQuestion = incrementquestion => incrementquestion.MultiplicationQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.MultiplicationScore++;
-						break;
-					case MathOperation.Division:
-						incrementOperationQuestion = incrementquestion => incrementquestion.DivisionQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.DivisionScore++;
-						break;
-					case MathOperation.Power:
-						incrementOperationQuestion = incrementquestion => incrementquestion.PowerQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.PowerScore++;
-						break;
-					case MathOperation.SquareRoot:
-						incrementOperationQuestion = incrementquestion => incrementquestion.SquareRootQuestion++;
-						incrementOperationScore = incrementscore => incrementscore.SquareRootScore++;
-						break;
-					default:
-						throw new Exception();
-				}
-				return (incrementOperationQuestion, incrementOperationScore);
+				incrementOperationQuestion = sco => sco.AdditionQuestion++;
+                incrementOperationScore = sco => sco.AdditionScore++;
 			}
-		}
 
-		public static OperationQuestionScore Score()
-		{
-			return new OperationQuestionScore();
+			public void Subtraction()
+			{
+				incrementOperationQuestion = sco => sco.SubtractionQuestion++;
+				incrementOperationScore = sco => sco.SubtractionScore++;
+			}
+
+			public void Multiplication()
+			{
+				incrementOperationQuestion = sco => sco.MultiplicationQuestion++;
+				incrementOperationScore = sco => sco.MultiplicationScore++;
+			}
+
+			public void Division()
+			{
+				incrementOperationQuestion = sco => sco.DivisionQuestion++;
+				incrementOperationScore = sco => sco.DivisionScore++;
+			}
+
+			public void Power()
+			{
+				incrementOperationQuestion = sco => sco.PowerQuestion++;
+				incrementOperationScore = sco => sco.PowerScore++;
+			}
+
+			public void SquareRoot()
+			{
+				incrementOperationQuestion = sco => sco.SquareRootQuestion++;
+				incrementOperationScore = sco => sco.SquareRootScore++;
+			}
+
+			public static OperationQuestionScore Score()
+			{
+				return new OperationQuestionScore();
+			}
 		}
 
 		public static (string message, double correctAnswer) GetMathsEquation(MathOperation mathOperation, UserDifficulty userDifficulty)
@@ -135,8 +137,8 @@ namespace mathstester
             int totalScore = 0;
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
-			var score = Score();
-			var question = Score();
+			var score = OperationQuestionScore.Score();
+			var question = OperationQuestionScore.Score();
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -151,20 +153,15 @@ namespace mathstester
 					Console.Write($"What is {message} =");
 				}
 
-				var (incrementOperationQuestion, incrementOperationScore) = OperationQuestionScore.Scores(mathOperation);
-
-				double userAnswer = Convert.ToDouble(Console.ReadLine());
+                double userAnswer = Convert.ToDouble(Console.ReadLine());
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.WriteLine("Well Done!");
-					incrementOperationQuestion(question);
-					incrementOperationScore(score);
 					totalScore++;
 				}
 				else
 				{
 					Console.WriteLine("Your answer is incorrect!");
-					incrementOperationQuestion(question);
 				}
 				numberOfQuestionsLeft--;
 			}
