@@ -87,11 +87,11 @@ namespace mathstester
 			public int PowerScore { get; set; }
 			public int SquareRootQuestion { get; set; }
 			public int SquareRootScore { get; set; }
+			public int totalScore { get; set; }
 
-            public int GetTotalScore()
+			public void GetTotalScore()
             {
-				int totalscore = 0;
-				return totalscore++;
+				totalScore++;
             }
 
             public void Increment(MathOperation mathOperation, bool isCorrect)
@@ -213,7 +213,7 @@ namespace mathstester
 			} while (numberOfQuestions % 10 != 0);
 
 			var (totalScore, score) = RunTest(numberOfQuestions, userDifficulty);
-			Console.WriteLine($"Total score: {totalScore} of {numberOfQuestions}");
+			Console.WriteLine($"Total score: {totalScore.totalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
 			{
