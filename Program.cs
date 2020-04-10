@@ -24,7 +24,7 @@ namespace mathstester
 		public static (int operationMin, int operationMax) GetPossibleOperationsByDifficulty(UserDifficulty userDifficulty)
 		{
 
-            switch (userDifficulty)
+            switch(userDifficulty)
 			{
 				case UserDifficulty.Easy:
 					return (1, 4);
@@ -34,65 +34,6 @@ namespace mathstester
 					return (3, 7);
 				default:
 					throw new Exception();
-			}
-		}
-
-		public class OperationQuestionScore
-		{
-			public int AdditionQuestion { get; set; }
-			public int AdditionScore { get; set; }
-			public int SubtractionQuestion { get; set; }
-			public int SubtractionScore { get; set; }
-			public int MultiplicationQuestion { get; set; }
-			public int MultiplicationScore { get; set; }
-			public int DivisionQuestion { get; set; }
-			public int DivisionScore { get; set; }
-			public int PowerQuestion { get; set; }
-			public int PowerScore { get; set; }
-			public int SquareRootQuestion { get; set; }
-			public int SquareRootScore { get; set; }
-		    Action<OperationQuestionScore> incrementOperationQuestion;
-			Action<OperationQuestionScore> incrementOperationScore;
-
-			public void Addition()
-			{
-				incrementOperationQuestion = sco => sco.AdditionQuestion++;
-                incrementOperationScore = sco => sco.AdditionScore++;
-			}
-
-			public void Subtraction()
-			{
-				incrementOperationQuestion = sco => sco.SubtractionQuestion++;
-				incrementOperationScore = sco => sco.SubtractionScore++;
-			}
-
-			public void Multiplication()
-			{
-				incrementOperationQuestion = sco => sco.MultiplicationQuestion++;
-				incrementOperationScore = sco => sco.MultiplicationScore++;
-			}
-
-			public void Division()
-			{
-				incrementOperationQuestion = sco => sco.DivisionQuestion++;
-				incrementOperationScore = sco => sco.DivisionScore++;
-			}
-
-			public void Power()
-			{
-				incrementOperationQuestion = sco => sco.PowerQuestion++;
-				incrementOperationScore = sco => sco.PowerScore++;
-			}
-
-			public void SquareRoot()
-			{
-				incrementOperationQuestion = sco => sco.SquareRootQuestion++;
-				incrementOperationScore = sco => sco.SquareRootScore++;
-			}
-
-			public static OperationQuestionScore Score()
-			{
-				return new OperationQuestionScore();
 			}
 		}
 
@@ -132,13 +73,86 @@ namespace mathstester
 			}
 		}
 
-		public static (int, OperationQuestionScore, OperationQuestionScore) RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+		public class OperationQuestionScore
 		{
-            int totalScore = 0;
+			public int AdditionQuestion { get; set; }
+			public int AdditionScore { get; set; }
+			public int SubtractionQuestion { get; set; }
+			public int SubtractionScore { get; set; }
+			public int MultiplicationQuestion { get; set; }
+			public int MultiplicationScore { get; set; }
+			public int DivisionQuestion { get; set; }
+			public int DivisionScore { get; set; }
+			public int PowerQuestion { get; set; }
+			public int PowerScore { get; set; }
+			public int SquareRootQuestion { get; set; }
+			public int SquareRootScore { get; set; }
+
+            public void Increment(MathOperation mathOperation, bool Iscorrect)
+            {
+				if (Iscorrect == true)
+				{
+                    switch (mathOperation)
+                    {
+						case MathOperation.Addition:
+							AdditionQuestion++;
+							AdditionScore++;
+							break;
+						case MathOperation.Subtraction:
+							SubtractionQuestion++;
+							SubtractionScore++;
+							break;
+						case MathOperation.Multiplication:
+							MultiplicationQuestion++;
+							MultiplicationScore++;
+							break;
+						case MathOperation.Division:
+							DivisionQuestion++;
+							DivisionScore++;
+							break;
+						case MathOperation.Power:
+							PowerQuestion++;
+							PowerScore++;
+							break;
+						case MathOperation.SquareRoot:
+							SquareRootQuestion++;
+							SquareRootScore++;
+							break;
+					}
+				}
+				else
+				{
+					switch (mathOperation)
+					{
+						case MathOperation.Addition:
+							AdditionQuestion++;
+							break;
+						case MathOperation.Subtraction:
+							SubtractionQuestion++;
+							break;
+						case MathOperation.Multiplication:
+							MultiplicationQuestion++;
+							break;
+						case MathOperation.Division:
+							DivisionQuestion++;
+							break;
+						case MathOperation.Power:
+							PowerQuestion++;
+							break;
+						case MathOperation.SquareRoot:
+							SquareRootQuestion++;
+							break;
+					}
+				}
+			}
+		}
+
+		public static (int, OperationQuestionScore) RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+		{
+			int totalScore = 0;
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
-			var score = OperationQuestionScore.Score();
-			var question = OperationQuestionScore.Score();
+			var score = new OperationQuestionScore();
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -158,14 +172,16 @@ namespace mathstester
 				{
 					Console.WriteLine("Well Done!");
 					totalScore++;
+					score.Increment(mathOperation, true);
 				}
 				else
 				{
 					Console.WriteLine("Your answer is incorrect!");
+					score.Increment(mathOperation, false);
 				}
 				numberOfQuestionsLeft--;
 			}
-			return (totalScore, score, question);
+			return (totalScore, score);
 		}
 		public static void Main(string[] args)
 		{
@@ -190,28 +206,28 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			var (totalScore, score, question) = RunTest(numberOfQuestions, userDifficulty);
+			var (totalScore, score) = RunTest(numberOfQuestions, userDifficulty);
 			Console.WriteLine($"Total score: {totalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
 			{
-				Console.WriteLine($"Addition score: {score.AdditionScore} of {question.AdditionQuestion}");
-				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {question.SubtractionQuestion}");
-				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {question.MultiplicationQuestion}");
+				Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
+				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
+				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
 			}
 			else if (userDifficulty == UserDifficulty.Normal)
 			{
-				Console.WriteLine($"Addition score: {score.AdditionScore} of {question.AdditionQuestion}");
-				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {question.SubtractionQuestion}");
-				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {question.MultiplicationQuestion}");
-				Console.WriteLine($"Division score: {score.DivisionScore} of {question.DivisionQuestion}");
+				Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
+				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
+				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
 			}
 			else if (userDifficulty == UserDifficulty.Hard)
 			{
-				Console.WriteLine($"Multipication score: {score.MultiplicationScore} of {question.MultiplicationQuestion}");
-				Console.WriteLine($"Division score: {score.DivisionScore} of {question.DivisionQuestion}");
-				Console.WriteLine($"Power score: {score.PowerScore} of {question.PowerQuestion}");
-				Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {question.SquareRootQuestion}");
+				Console.WriteLine($"Multipication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
+				Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
+				Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
 			}
 		}
 	}
