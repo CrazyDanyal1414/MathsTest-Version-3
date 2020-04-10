@@ -88,9 +88,15 @@ namespace mathstester
 			public int SquareRootQuestion { get; set; }
 			public int SquareRootScore { get; set; }
 
-            public void Increment(MathOperation mathOperation, bool Iscorrect)
+            public int GetTotalScore()
             {
-				if (Iscorrect == true)
+				int totalscore = 0;
+				return totalscore++;
+            }
+
+            public void Increment(MathOperation mathOperation, bool isCorrect)
+            {
+				if (isCorrect == true)
 				{
                     switch (mathOperation)
                     {
@@ -147,12 +153,12 @@ namespace mathstester
 			}
 		}
 
-		public static (int, OperationQuestionScore) RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+		public static (OperationQuestionScore, OperationQuestionScore) RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
 		{
-			int totalScore = 0;
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
 			var score = new OperationQuestionScore();
+			var totalScore = new OperationQuestionScore();
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -171,7 +177,7 @@ namespace mathstester
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.WriteLine("Well Done!");
-					totalScore++;
+					totalScore.GetTotalScore();
 					score.Increment(mathOperation, true);
 				}
 				else
