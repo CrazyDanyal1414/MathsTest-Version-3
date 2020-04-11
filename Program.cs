@@ -87,12 +87,7 @@ namespace mathstester
 			public int PowerScore { get; set; }
 			public int SquareRootQuestion { get; set; }
 			public int SquareRootScore { get; set; }
-			public int totalScore { get; set; }
-
-			public void GetTotalScore()
-            {
-				totalScore++;
-            }
+			public int TotalScore { get; set; }
 
             public void Increment(MathOperation mathOperation, bool isCorrect)
             {
@@ -153,12 +148,11 @@ namespace mathstester
 			}
 		}
 
-		public static (OperationQuestionScore, OperationQuestionScore) RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
 			var score = new OperationQuestionScore();
-			var totalScore = new OperationQuestionScore();
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -177,7 +171,7 @@ namespace mathstester
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.WriteLine("Well Done!");
-					totalScore.GetTotalScore();
+					score.TotalScore++;
 					score.Increment(mathOperation, true);
 				}
 				else
@@ -187,7 +181,7 @@ namespace mathstester
 				}
 				numberOfQuestionsLeft--;
 			}
-			return (totalScore, score);
+			return score;
 		}
 		public static void Main(string[] args)
 		{
@@ -212,8 +206,8 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			var (totalScore, score) = RunTest(numberOfQuestions, userDifficulty);
-			Console.WriteLine($"Total score: {totalScore.totalScore} of {numberOfQuestions}");
+			var score = RunTest(numberOfQuestions, userDifficulty);
+			Console.WriteLine($"Total score:{score.TotalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
 			{
