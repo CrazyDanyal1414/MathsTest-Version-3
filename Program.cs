@@ -21,7 +21,8 @@ namespace mathstester
 			Power = 5,
 			SquareRoot = 6
 		}
-		public static (int operationMin, int operationMax) GetPossibleOperationsByDifficulty(UserDifficulty userDifficulty)
+
+        public static (int operationMin, int operationMax) GetPossibleOperationsByDifficulty(UserDifficulty userDifficulty)
 		{
 
             switch(userDifficulty)
@@ -62,7 +63,7 @@ namespace mathstester
 					number2 = randomNumber.Next(1000);
 					return ($"{number1} / {number2}", number1 / (double)number2);
 				case MathOperation.Power:
-					number1 = randomNumber.Next(13);
+					number1 = randomNumber.Next(20);
 					number2 = randomNumber.Next(5);
 					return ($"{number1} ^ {number2}", Math.Pow(number1, number2));
 				case MathOperation.SquareRoot:
@@ -75,19 +76,19 @@ namespace mathstester
 
 		public class OperationQuestionScore
 		{
-			public int AdditionQuestion { get; set; }
-			public int AdditionScore { get; set; }
-			public int SubtractionQuestion { get; set; }
-			public int SubtractionScore { get; set; }
-			public int MultiplicationQuestion { get; set; }
-			public int MultiplicationScore { get; set; }
-			public int DivisionQuestion { get; set; }
-			public int DivisionScore { get; set; }
-			public int PowerQuestion { get; set; }
-			public int PowerScore { get; set; }
-			public int SquareRootQuestion { get; set; }
-			public int SquareRootScore { get; set; }
-			public int TotalScore { get; set; }
+			public int AdditionQuestion;
+			public int AdditionScore;
+			public int SubtractionQuestion;
+			public int SubtractionScore;
+			public int MultiplicationQuestion;
+			public int MultiplicationScore;
+			public int DivisionQuestion;
+			public int DivisionScore;
+			public int PowerQuestion;
+			public int PowerScore;
+			public int SquareRootQuestion;
+			public int SquareRootScore;
+			public int TotalScore;
 
             public void Increment(MathOperation mathOperation, bool isCorrect)
             {
@@ -120,6 +121,7 @@ namespace mathstester
 							SquareRootScore++;
 							break;
 					}
+					TotalScore++;
 				}
 				else
 				{
@@ -171,7 +173,6 @@ namespace mathstester
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.WriteLine("Well Done!");
-					score.TotalScore++;
 					score.Increment(mathOperation, true);
 				}
 				else
@@ -183,7 +184,8 @@ namespace mathstester
 			}
 			return score;
 		}
-		public static void Main(string[] args)
+
+        public static void Main(string[] args)
 		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
@@ -206,7 +208,7 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			var score = RunTest(numberOfQuestions, userDifficulty);
+            var score = RunTest(numberOfQuestions, userDifficulty);
 			Console.WriteLine($"Total score:{score.TotalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
