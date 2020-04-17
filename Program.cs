@@ -76,19 +76,19 @@ namespace mathstester
 
 		public class OperationQuestionScore
 		{
-			public int AdditionQuestion;
-			public int AdditionScore;
-			public int SubtractionQuestion;
-			public int SubtractionScore;
-			public int MultiplicationQuestion;
-			public int MultiplicationScore;
-			public int DivisionQuestion;
-			public int DivisionScore;
-			public int PowerQuestion;
-			public int PowerScore;
-			public int SquareRootQuestion;
-			public int SquareRootScore;
-			public int TotalScore;
+			public int AdditionQuestion { get; private set; }
+			public int AdditionScore { get; private set; }
+			public int SubtractionQuestion { get; private set; }
+			public int SubtractionScore { get; private set; }
+			public int MultiplicationQuestion { get; private set; }
+			public int MultiplicationScore { get; private set; }
+			public int DivisionQuestion { get; private set; }
+			public int DivisionScore { get; private set; }
+			public int PowerQuestion { get; private set; }
+			public int PowerScore { get; private set; }
+			public int SquareRootQuestion { get; private set; }
+			public int SquareRootScore { get; private set; }
+			public int TotalScore { get; private set; }
 
             public void Increment(MathOperation mathOperation, bool isCorrect)
             {
