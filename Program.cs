@@ -93,9 +93,9 @@ namespace mathstester
 			public int PowerScore { get; private set; }
 			public int SquareRootQuestion { get; private set; }
 			public int SquareRootScore { get; private set; }
-			public int TotalScore { get; private set; }
-			public OperationQuestionScore Score;
-			public int NumberOfQuestions;
+			public int TotalScore { get; set; }
+			public int NumberOfQuestions { get; set; }
+            public OperationQuestionScore Score { get; set; }
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
             {
@@ -194,28 +194,28 @@ namespace mathstester
 
         public static void Main(string[] args)
 		{
-			string userInputDifficulty = "E";
-			int numberOfQuestions = 0;
+            var numberOfQuestions = 1;
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
 			difficultyDictionary.Add("N", UserDifficulty.Normal);
 			difficultyDictionary.Add("H", UserDifficulty.Hard);
-
+			string userInputDifficulty = "E";
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 			var score = RunTest(numberOfQuestions, userDifficulty);
 			OperationQuestionScore obj = new OperationQuestionScore();
-			obj.Score = score;
 			obj.NumberOfQuestions = numberOfQuestions;
+			obj.Score = score;
 			IFormatter formatter = new BinaryFormatter();
-			Stream stream = new FileStream("D:\\Example.txt", FileMode.Create, FileAccess.Write);
+			Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
             formatter.Serialize(stream, obj);
 			stream.Close();
-			stream = new FileStream("D:\\Example.txt", FileMode.Open, FileAccess.Read);
+			stream = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
 			OperationQuestionScore objnew = (OperationQuestionScore)formatter.Deserialize(stream);
-			Console.WriteLine(objnew.Score);
-			Console.WriteLine(objnew.NumberOfQuestions);
+			Console.WriteLine($"Last time you did the test on {userDifficulty} level and got {objnew.Score}/{objnew.NumberOfQuestions}");
 
 			Console.ReadKey();
+			Console.Write(System.Environment.NewLine);
+
 
 			do
 			{
@@ -236,7 +236,6 @@ namespace mathstester
 				Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
 				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
 				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
-				Console.WriteLine(score);
 			}
 			else if (userDifficulty == UserDifficulty.Normal)
 			{
