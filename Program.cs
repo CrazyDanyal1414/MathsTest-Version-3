@@ -194,7 +194,7 @@ namespace mathstester
 
         public static void Main(string[] args)
 		{
-            var numberOfQuestions = 1;
+            var numberOfQuestions = 0;
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
 			difficultyDictionary.Add("N", UserDifficulty.Normal);
