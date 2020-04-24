@@ -97,6 +97,16 @@ namespace mathstester
 			public int SquareRootScore { get; private set; }
 			public int TotalScore { get; private set; }
             public int score { get; private set; }
+			[Serializable]
+			public class NumberOfQuestions
+			{
+				private readonly int _NumberOfQuestions;
+				public int NumberOfQuestion { get; set; }
+				public NumberOfQuestions()
+				{
+					_NumberOfQuestions = NumberOfQuestion;
+				}
+			}
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
             {
@@ -158,17 +168,6 @@ namespace mathstester
 			}
 		}
 
-        [Serializable]
-		class NumberOfQuestions
-		{
-			private readonly int _NumberOfQuestions;
-			public int NumberOfQuestion { get; set; }
-			public NumberOfQuestions()
-			{
-				_NumberOfQuestions = NumberOfQuestion;
-			}
-		}
-
 		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
 		{
 			Random random = new Random();
@@ -215,7 +214,7 @@ namespace mathstester
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 			OperationQuestionScore obj = new OperationQuestionScore();
-			NumberOfQuestions noq = new NumberOfQuestions();
+			OperationQuestionScore.NumberOfQuestions noq = new OperationQuestionScore.NumberOfQuestions();
             _ = noq.NumberOfQuestion;
             _ = obj.score;
 			IFormatter formatter = new BinaryFormatter();
@@ -228,7 +227,7 @@ namespace mathstester
 			stream1 = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
 			stream2 = new FileStream("Example2.txt", FileMode.Open, FileAccess.Read);
 			OperationQuestionScore objnew = (OperationQuestionScore)formatter.Deserialize(stream1);
-			NumberOfQuestions noqnew = (NumberOfQuestions)formatter.Deserialize(stream2);
+			OperationQuestionScore.NumberOfQuestions noqnew = (OperationQuestionScore.NumberOfQuestions)formatter.Deserialize(stream2);
 			Console.WriteLine($"Last time you did the test on {userDifficulty} level and got {objnew.score}/{noqnew.NumberOfQuestion}");
 
 			Console.ReadKey();
