@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Orleans.CodeGeneration;
-using Orleans.Serialization;
 
 namespace mathstester
 {
@@ -96,16 +94,12 @@ namespace mathstester
 			public int SquareRootQuestion { get; private set; }
 			public int SquareRootScore { get; private set; }
 			public int TotalScore { get; private set; }
-            public int score { get; private set; }
-			[Serializable]
-			public class NumberOfQuestions
+			public int score { get; private set; }
+			public int NumberOfQuestions { get; }
+			public UserDifficulty UserDifficulty{ get; set; }
+			public OperationQuestionScore(int numberOfQuestions)
 			{
-				private readonly int _NumberOfQuestions;
-				public int NumberOfQuestion { get; set; }
-				public NumberOfQuestions()
-				{
-					_NumberOfQuestions = NumberOfQuestion;
-				}
+				NumberOfQuestions = numberOfQuestions;
 			}
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
@@ -172,7 +166,7 @@ namespace mathstester
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
-			var score = new OperationQuestionScore();
+			var score = new OperationQuestionScore(numberOfQuestionsLeft);
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -205,35 +199,22 @@ namespace mathstester
   
 		public static void Main(string[] args)
 		{
-            var numberOfQuestions = 0;
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
 			difficultyDictionary.Add("N", UserDifficulty.Normal);
 			difficultyDictionary.Add("H", UserDifficulty.Hard);
-			string userInputDifficulty = "E";
-			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
-			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
-			OperationQuestionScore obj = new OperationQuestionScore();
-			OperationQuestionScore.NumberOfQuestions noq = new OperationQuestionScore.NumberOfQuestions();
-            _ = noq.NumberOfQuestion;
-            _ = obj.score;
+
+			string userInputDifficulty;
+			int numberOfQuestions = 0;
+
+			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions);
+			_ = obj.NumberOfQuestions;
+			_ = obj.score;
+			_ = obj.UserDifficulty;
 			IFormatter formatter = new BinaryFormatter();
 			Stream stream1 = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
-			Stream stream2 = new FileStream("Example2.txt", FileMode.Create, FileAccess.Write);
 			formatter.Serialize(stream1, obj);
 			stream1.Close();
-			formatter.Serialize(stream2, noq);
-			stream2.Close();
-			stream1 = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
-			stream2 = new FileStream("Example2.txt", FileMode.Open, FileAccess.Read);
-			OperationQuestionScore objnew = (OperationQuestionScore)formatter.Deserialize(stream1);
-			OperationQuestionScore.NumberOfQuestions noqnew = (OperationQuestionScore.NumberOfQuestions)formatter.Deserialize(stream2);
-			Console.WriteLine($"Last time you did the test on {userDifficulty} level and got {objnew.score}/{noqnew.NumberOfQuestion}");
-
-			Console.ReadKey();
-			Console.Write(Environment.NewLine);
-
-
 			do
 			{
 				Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
@@ -245,6 +226,15 @@ namespace mathstester
 				Console.WriteLine("How many questions would you like to answer? Please type a number divisible by 10!");
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
+
+			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
+			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
+			stream1 = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
+			OperationQuestionScore objnew = (OperationQuestionScore)formatter.Deserialize(stream1);
+			Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.score}/{objnew.NumberOfQuestions}");
+
+			Console.ReadKey();
+			Console.Write(Environment.NewLine);
 
 			Console.WriteLine($"Total score:{score.TotalScore} of {numberOfQuestions}");
 
