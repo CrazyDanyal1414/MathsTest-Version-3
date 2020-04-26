@@ -205,16 +205,8 @@ namespace mathstester
 			difficultyDictionary.Add("H", UserDifficulty.Hard);
 
 			string userInputDifficulty;
-			int numberOfQuestions = 0;
+			int numberOfQuestions;
 
-			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions);
-			_ = obj.NumberOfQuestions;
-			_ = obj.score;
-			_ = obj.UserDifficulty;
-			IFormatter formatter = new BinaryFormatter();
-			Stream stream1 = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
-			formatter.Serialize(stream1, obj);
-			stream1.Close();
 			do
 			{
 				Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
@@ -227,6 +219,15 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
+
+			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions);
+			_ = obj.NumberOfQuestions;
+			_ = obj.score;
+			_ = obj.UserDifficulty;
+			IFormatter formatter = new BinaryFormatter();
+			Stream stream1 = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
+			formatter.Serialize(stream1, obj);
+			stream1.Close();
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 			stream1 = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
