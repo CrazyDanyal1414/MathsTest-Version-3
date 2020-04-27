@@ -94,12 +94,13 @@ namespace mathstester
 			public int SquareRootQuestion { get; private set; }
 			public int SquareRootScore { get; private set; }
 			public int TotalScore { get; private set; }
-			public int score { get; private set; }
+			public OperationQuestionScore Score { get; private set; }
 			public int NumberOfQuestions { get; }
-			public UserDifficulty UserDifficulty{ get; set; }
-			public OperationQuestionScore(int numberOfQuestions)
+			public UserDifficulty UserDifficulty{ get; }
+			public OperationQuestionScore(int numberOfQuestions, UserDifficulty userDifficulty)
 			{
 				NumberOfQuestions = numberOfQuestions;
+				UserDifficulty = userDifficulty;
 			}
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
@@ -166,7 +167,7 @@ namespace mathstester
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
-			var score = new OperationQuestionScore(numberOfQuestionsLeft);
+			var score = new OperationQuestionScore(numberOfQuestionsLeft, userDifficulty);
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -196,6 +197,19 @@ namespace mathstester
 			}
 			return score;
 		}
+
+        static void Deserialize()
+        {
+			OperationQuestionScore obj = null;
+			Stream stream = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
+			IFormatter formatter = new BinaryFormatter();
+			obj = (OperationQuestionScore)formatter.Deserialize(stream);
+			stream.Close();
+			Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.Score}/{obj.NumberOfQuestions}");
+			Console.ReadKey();
+			Console.Write(Environment.NewLine);
+
+		}
   
 		public static void Main(string[] args)
 		{
@@ -206,6 +220,8 @@ namespace mathstester
 
 			string userInputDifficulty;
 			int numberOfQuestions;
+
+			Deserialize();
 
 			do
 			{
@@ -218,25 +234,18 @@ namespace mathstester
 				Console.WriteLine("How many questions would you like to answer? Please type a number divisible by 10!");
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
-
-
-			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions);
-			_ = obj.NumberOfQuestions;
-			_ = obj.score;
-			_ = obj.UserDifficulty;
-			IFormatter formatter = new BinaryFormatter();
-			Stream stream1 = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
-			formatter.Serialize(stream1, obj);
-			stream1.Close();
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
-			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
-			stream1 = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
-			OperationQuestionScore objnew = (OperationQuestionScore)formatter.Deserialize(stream1);
-			Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.score}/{objnew.NumberOfQuestions}");
 
-			Console.ReadKey();
-			Console.Write(Environment.NewLine);
+			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions, userDifficulty);
+			_ = obj.NumberOfQuestions;
+			_ = obj.Score;
+			_ = obj.UserDifficulty;
+			Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
+			IFormatter formatter = new BinaryFormatter();
+			formatter.Serialize(stream, obj);
+			stream.Close();
 
+            OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 			Console.WriteLine($"Total score:{score.TotalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
