@@ -93,10 +93,9 @@ namespace mathstester
 			public int PowerScore { get; private set; }
 			public int SquareRootQuestion { get; private set; }
 			public int SquareRootScore { get; private set; }
-			public int TotalScore { get; private set; }
-			public OperationQuestionScore Score { get; private set; }
+			public int TotalScore { get; set; }
 			public int NumberOfQuestions { get; }
-			public UserDifficulty UserDifficulty{ get; }
+			public UserDifficulty UserDifficulty { get; }
 			public OperationQuestionScore(int numberOfQuestions, UserDifficulty userDifficulty)
 			{
 				NumberOfQuestions = numberOfQuestions;
@@ -205,7 +204,7 @@ namespace mathstester
 			IFormatter formatter = new BinaryFormatter();
 			obj = (OperationQuestionScore)formatter.Deserialize(stream);
 			stream.Close();
-			Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.Score}/{obj.NumberOfQuestions}");
+			Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.TotalScore}/{obj.NumberOfQuestions}");
 			Console.ReadKey();
 			Console.Write(Environment.NewLine);
 
@@ -236,17 +235,17 @@ namespace mathstester
 			} while (numberOfQuestions % 10 != 0);
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 
+			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions, userDifficulty);
 			_ = obj.NumberOfQuestions;
-			_ = obj.Score;
 			_ = obj.UserDifficulty;
+			obj.TotalScore = score.TotalScore;
 			Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
 			IFormatter formatter = new BinaryFormatter();
 			formatter.Serialize(stream, obj);
 			stream.Close();
 
-            OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
-			Console.WriteLine($"Total score:{score.TotalScore} of {numberOfQuestions}");
+			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
 			{
