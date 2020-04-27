@@ -96,10 +96,11 @@ namespace mathstester
 			public int TotalScore { get; set; }
 			public int NumberOfQuestions { get; }
 			public UserDifficulty UserDifficulty { get; }
-			public OperationQuestionScore(int numberOfQuestions, UserDifficulty userDifficulty)
+			public OperationQuestionScore(int numberOfQuestions, UserDifficulty userDifficulty, int score)
 			{
 				NumberOfQuestions = numberOfQuestions;
 				UserDifficulty = userDifficulty;
+				TotalScore = score;
 			}
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
@@ -162,11 +163,11 @@ namespace mathstester
 			}
 		}
 
-		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty, int scorer)
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
-			var score = new OperationQuestionScore(numberOfQuestionsLeft, userDifficulty);
+			var score = new OperationQuestionScore(numberOfQuestionsLeft, userDifficulty, scorer);
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -219,6 +220,7 @@ namespace mathstester
 
 			string userInputDifficulty;
 			int numberOfQuestions;
+			int scorer = 0;
 
 			Deserialize();
 
@@ -235,11 +237,11 @@ namespace mathstester
 			} while (numberOfQuestions % 10 != 0);
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 
-			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
-			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions, userDifficulty);
-			_ = obj.NumberOfQuestions;
+			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty, scorer);
+			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions, userDifficulty, scorer);
+            _ = obj.NumberOfQuestions;
 			_ = obj.UserDifficulty;
-			obj.TotalScore = score.TotalScore;
+            _ = score.TotalScore;
 			Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
 			IFormatter formatter = new BinaryFormatter();
 			formatter.Serialize(stream, obj);
