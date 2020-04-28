@@ -96,11 +96,10 @@ namespace mathstester
 			public int TotalScore { get; set; }
 			public int NumberOfQuestions { get; }
 			public UserDifficulty UserDifficulty { get; }
-			public OperationQuestionScore(int numberOfQuestions, UserDifficulty userDifficulty, int score)
+			public OperationQuestionScore(int numberOfQuestions, UserDifficulty userDifficulty)
 			{
 				NumberOfQuestions = numberOfQuestions;
 				UserDifficulty = userDifficulty;
-				TotalScore = score;
 			}
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
@@ -163,11 +162,11 @@ namespace mathstester
 			}
 		}
 
-		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty, int scorer)
+		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
-			var score = new OperationQuestionScore(numberOfQuestionsLeft, userDifficulty, scorer);
+			var score = new OperationQuestionScore(numberOfQuestionsLeft, userDifficulty);
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -198,7 +197,7 @@ namespace mathstester
 			return score;
 		}
 
-        static void Deserialize()
+		static void Deserialize()
         {
 			OperationQuestionScore obj = null;
 			Stream stream = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
@@ -206,6 +205,39 @@ namespace mathstester
 			obj = (OperationQuestionScore)formatter.Deserialize(stream);
 			stream.Close();
 			Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.TotalScore}/{obj.NumberOfQuestions}");
+
+			int decimalScore = (obj.TotalScore) / (obj.NumberOfQuestions);
+
+
+			if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore <= 0.7))
+            {
+				Console.WriteLine($"You should stay on Easy difficulty");
+            }
+			else if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore > 0.7))
+			{
+				Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
+			}
+			else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore < 0.3))
+			{
+				Console.WriteLine($"Normal difficulty seems to be to hard for you:( You should go down to Easy difficulty");
+			}
+			else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore > 0.7))
+			{
+				Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
+			}
+			else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore <= 0.6))
+			{
+				Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
+			}
+			else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore > 0.6))
+			{
+				Console.WriteLine($"You are a maths Genius! Sadly for you this is the hardest level");
+			}
+            else
+			{
+				Console.WriteLine($"You should stay on Normal difficulty");
+			}
+
 			Console.ReadKey();
 			Console.Write(Environment.NewLine);
 
@@ -220,7 +252,6 @@ namespace mathstester
 
 			string userInputDifficulty;
 			int numberOfQuestions;
-			int scorer = 0;
 
 			Deserialize();
 
@@ -237,14 +268,13 @@ namespace mathstester
 			} while (numberOfQuestions % 10 != 0);
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 
-			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty, scorer);
-			OperationQuestionScore obj = new OperationQuestionScore(numberOfQuestions, userDifficulty, scorer);
-            _ = obj.NumberOfQuestions;
-			_ = obj.UserDifficulty;
+			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
+            _ = score.NumberOfQuestions;
+			_ = score.UserDifficulty;
             _ = score.TotalScore;
 			Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
 			IFormatter formatter = new BinaryFormatter();
-			formatter.Serialize(stream, obj);
+			formatter.Serialize(stream, score);
 			stream.Close();
 
 			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
