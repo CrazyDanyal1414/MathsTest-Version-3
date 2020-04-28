@@ -206,7 +206,7 @@ namespace mathstester
 			stream.Close();
 			Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.TotalScore}/{obj.NumberOfQuestions}");
 
-			int decimalScore = (obj.TotalScore) / (obj.NumberOfQuestions);
+			double decimalScore = (double)(obj.TotalScore) / (double)(obj.NumberOfQuestions);
 
 
 			if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore <= 0.7))
