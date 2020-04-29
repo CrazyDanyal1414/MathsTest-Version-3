@@ -248,41 +248,48 @@ namespace mathstester
 				stream.Close();
 				Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.TotalScore}/{obj.NumberOfQuestions}");
 
-				double decimalScore = (double)(obj.TotalScore) / (double)(obj.NumberOfQuestions);
+				double decimalScore = (double)obj.TotalScore / (double)obj.NumberOfQuestions;
 
-
-				if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore <= 0.7))
+				if (obj.UserDifficulty == UserDifficulty.Easy)
 				{
-					Console.WriteLine($"You should stay on Easy difficulty");
+					if (decimalScore <= 0.7)
+					{
+						Console.WriteLine($"You should stay on Easy difficulty");
+					}
+					else
+					{
+						Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
+					}
 				}
-				else if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore > 0.7))
+				else if (obj.UserDifficulty == UserDifficulty.Normal)
 				{
-					Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
+					if (decimalScore <= 0.3)
+					{
+						Console.WriteLine($"Normal difficulty seems to be to hard for you:( You should go down to Easy difficulty");
+					}
+					else if ((decimalScore > 0.3) && (decimalScore <= 0.7))
+					{
+						Console.WriteLine($"You should stay on Normal difficulty");
+					}
+					else
+					{
+						Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
+					}
 				}
-				else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore <= 0.3))
+				else if (obj.UserDifficulty == UserDifficulty.Hard)
 				{
-					Console.WriteLine($"Normal difficulty seems to be to hard for you:( You should go down to Easy difficulty");
-				}
-				else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore > 0.3) && (decimalScore <= 0.7))
-				{
-					Console.WriteLine($"You should stay on Normal difficulty");
-				}
-				else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore > 0.7))
-				{
-					Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
-				}
-				else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore <= 0.3))
-				{
-					Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
-				}
-				else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore > 0.3) && (decimalScore <= 0.8))
-				{
-					Console.WriteLine($"You should stay on Hard difficulty");
-				}
-				else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore > 0.8))
-				{
-					Console.WriteLine($"You are a maths Genius! Sadly this is the hardest level");
-				}
+					if (decimalScore <= 0.3)
+					{
+						Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
+					}
+                    else if ((decimalScore > 0.3) && (decimalScore <= 0.8))
+                    {
+						Console.WriteLine($"You should stay on Hard difficulty");
+					}
+                    else
+                    {
+						Console.WriteLine($"You are a maths Genius! Sadly this is the hardest level");
+					}
 
 				Console.ReadKey();
 				Console.Write(Environment.NewLine);
