@@ -77,9 +77,7 @@ namespace mathstester
 			}
 		}
 
-
-        [Serializable]
-
+		[Serializable]
 		public class OperationQuestionScore
 		{
 			public int AdditionQuestion { get; private set; }
@@ -94,7 +92,7 @@ namespace mathstester
 			public int PowerScore { get; private set; }
 			public int SquareRootQuestion { get; private set; }
 			public int SquareRootScore { get; private set; }
-			public int TotalScore { get; set; }
+            public int TotalScore { get; private set; }
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
 			{
@@ -221,7 +219,7 @@ namespace mathstester
 		[Serializable]
 		public class ToFile
 		{
-			public int TotalScore { get; set; }
+			public int TotalScore { get; private set; }
 			public int NumberOfQuestions { get; }
 			public UserDifficulty UserDifficulty { get; }
 			public ToFile(int numberOfQuestions, UserDifficulty userDifficulty)
@@ -232,27 +230,28 @@ namespace mathstester
 			public static void Serialize()
 			{
 				var (userDifficulty, numberOfQuestions) = UserInputs();
-				OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 				ToFile obj = new ToFile(numberOfQuestions, userDifficulty);
 				_ = obj.NumberOfQuestions;
 				_ = obj.UserDifficulty;
 				_ = obj.TotalScore;
 				Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
-				IFormatter formatter = new BinaryFormatter();
+				BinaryFormatter formatter = new BinaryFormatter();
 				formatter.Serialize(stream, obj);
 				stream.Close();
 			}
+
+			[OnDeserialized]
 			public static void Deserialize()
 			{
 				Stream stream = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
-				IFormatter formatter = new BinaryFormatter();
-				ToFile obj = (ToFile)formatter.Deserialize(stream);
+				BinaryFormatter formatter = new BinaryFormatter();
+				ToFile objnew = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
-				Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.TotalScore}/{obj.NumberOfQuestions}");
+				Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");
 
-				double decimalScore = (double)obj.TotalScore / (double)obj.NumberOfQuestions;
+				double decimalScore = (double)objnew.TotalScore / (double)objnew.NumberOfQuestions;
 
-				if (obj.UserDifficulty == UserDifficulty.Easy)
+				if (objnew.UserDifficulty == UserDifficulty.Easy)
 				{
 					if (decimalScore <= 0.7)
 					{
@@ -263,7 +262,7 @@ namespace mathstester
 						Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
 					}
 				}
-				else if (obj.UserDifficulty == UserDifficulty.Normal)
+				else if (objnew.UserDifficulty == UserDifficulty.Normal)
 				{
 					if (decimalScore <= 0.3)
 					{
@@ -278,7 +277,7 @@ namespace mathstester
 						Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
 					}
 				}
-				else if (obj.UserDifficulty == UserDifficulty.Hard)
+				else if (objnew.UserDifficulty == UserDifficulty.Hard)
 				{
 					if (decimalScore <= 0.3)
 					{
