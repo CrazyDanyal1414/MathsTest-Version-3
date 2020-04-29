@@ -241,7 +241,7 @@ namespace mathstester
 			public static void Deserialize()
 			{
                 Stream stream = new FileStream("D:\\Example.txt", FileMode.Open, FileAccess.Read);
-				BinaryFormatter formatter = new BinaryFormatter();
+				IFormatter formatter = new BinaryFormatter();
 				ToFile objnew = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
 				Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");
@@ -298,7 +298,6 @@ namespace mathstester
 			{
 			    ToFile.Deserialize();
 			    var (userDifficulty, numberOfQuestions) = UserInputs();
-			    ToFile.Serialize();
 			    OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 				Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
 
