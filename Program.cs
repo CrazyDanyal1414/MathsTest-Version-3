@@ -6,9 +6,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace mathstester
 {
-    class Program
-    {
-        public enum UserDifficulty
+	class Program
+	{
+		public enum UserDifficulty
 		{
 			Easy,
 			Normal,
@@ -16,8 +16,8 @@ namespace mathstester
 		}
 
 		public enum MathOperation
-		{ 
-            Addition = 1,
+		{
+			Addition = 1,
 			Subtraction = 2,
 			Multiplication = 3,
 			Division = 4,
@@ -28,7 +28,7 @@ namespace mathstester
 		public static (int operationMin, int operationMax) GetPossibleOperationsByDifficulty(UserDifficulty userDifficulty)
 		{
 
-            switch(userDifficulty)
+			switch (userDifficulty)
 			{
 				case UserDifficulty.Easy:
 					return (1, 4);
@@ -43,7 +43,7 @@ namespace mathstester
 
 		public static (string message, double correctAnswer) GetMathsEquation(MathOperation mathOperation, UserDifficulty userDifficulty)
 		{
-		    int number1;
+			int number1;
 			int number2;
 			Random randomNumber = new Random();
 
@@ -77,6 +77,9 @@ namespace mathstester
 			}
 		}
 
+
+        [Serializable]
+
 		public class OperationQuestionScore
 		{
 			public int AdditionQuestion { get; private set; }
@@ -94,11 +97,11 @@ namespace mathstester
 			public int TotalScore { get; set; }
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
-            {
+			{
 				if (isCorrect == true)
 				{
-                    switch (mathOperation)
-                    {
+					switch (mathOperation)
+					{
 						case MathOperation.Addition:
 							AdditionQuestion++;
 							AdditionScore++;
@@ -172,7 +175,7 @@ namespace mathstester
 					Console.Write($"What is {message} =");
 				}
 
-                double userAnswer = Convert.ToDouble(Console.ReadLine());
+				double userAnswer = Convert.ToDouble(Console.ReadLine());
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.WriteLine("Well Done!");
@@ -188,8 +191,8 @@ namespace mathstester
 			return score;
 		}
 
-        static (UserDifficulty, int) UserInputs()
-        {
+		static (UserDifficulty, int) UserInputs()
+		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
 			difficultyDictionary.Add("N", UserDifficulty.Normal);
@@ -236,15 +239,14 @@ namespace mathstester
 				_ = obj.TotalScore;
 				Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
 				IFormatter formatter = new BinaryFormatter();
-				formatter.Serialize(stream, score);
+				formatter.Serialize(stream, obj);
 				stream.Close();
 			}
 			public static void Deserialize()
 			{
-				ToFile obj = null;
 				Stream stream = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
 				IFormatter formatter = new BinaryFormatter();
-				obj = (ToFile)formatter.Deserialize(stream);
+				ToFile obj = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
 				Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.TotalScore}/{obj.NumberOfQuestions}");
 
@@ -282,51 +284,48 @@ namespace mathstester
 					{
 						Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
 					}
-                    else if ((decimalScore > 0.3) && (decimalScore <= 0.8))
-                    {
+					else if ((decimalScore > 0.3) && (decimalScore <= 0.8))
+					{
 						Console.WriteLine($"You should stay on Hard difficulty");
 					}
-                    else
-                    {
+					else
+					{
 						Console.WriteLine($"You are a maths Genius! Sadly this is the hardest level");
 					}
-
+				}
 				Console.ReadKey();
 				Console.Write(Environment.NewLine);
-
 			}
 		}
 
-		public static void Main(string[] args)
-		{
-			ToFile.Deserialize();
-
-
-			var(userDifficulty, numberOfQuestions) = UserInputs();
-			ToFile.Serialize();
-			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
-			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
-
-			if (userDifficulty == UserDifficulty.Easy)
+			public static void Main(string[] args)
 			{
-				Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
-				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
-				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+			    ToFile.Deserialize();
+				var (userDifficulty, numberOfQuestions) = UserInputs();
+				ToFile.Serialize();
+				OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
+				Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
+
+				if (userDifficulty == UserDifficulty.Easy)
+				{
+					Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
+					Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
+					Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+				}
+				else if (userDifficulty == UserDifficulty.Normal)
+				{
+					Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
+					Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
+					Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+					Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
+				}
+				else if (userDifficulty == UserDifficulty.Hard)
+				{
+					Console.WriteLine($"Multipication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+					Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
+					Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
+					Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
+				}
 			}
-			else if (userDifficulty == UserDifficulty.Normal)
-			{
-				Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
-				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
-				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
-				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
-			}
-			else if (userDifficulty == UserDifficulty.Hard)
-			{
-				Console.WriteLine($"Multipication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
-				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
-				Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
-				Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
-			}
-		}
 	}
 }
