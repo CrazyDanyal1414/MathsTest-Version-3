@@ -77,7 +77,6 @@ namespace mathstester
 			}
 		}
 
-		[Serializable]
 		public class OperationQuestionScore
 		{
 			public int AdditionQuestion { get; private set; }
@@ -234,17 +233,16 @@ namespace mathstester
 				_ = obj.NumberOfQuestions;
 				_ = obj.UserDifficulty;
 				_ = obj.TotalScore;
-				Stream stream = new FileStream(@"Examples.txt", FileMode.Create, FileAccess.Write);
-				BinaryFormatter formatter = new BinaryFormatter();
+				IFormatter formatter = new BinaryFormatter();
+				Stream stream = new FileStream("D:\\Example.txt", FileMode.Create, FileAccess.Write);
 				formatter.Serialize(stream, obj);
 				stream.Close();
 			}
 			public static void Deserialize()
 			{
-				ToFile objnew = null;
-                Stream stream = new FileStream(@"Examples.txt", FileMode.Open, FileAccess.Read);
+                Stream stream = new FileStream("D:\\Example.txt", FileMode.Open, FileAccess.Read);
 				BinaryFormatter formatter = new BinaryFormatter();
-				objnew = (ToFile)formatter.Deserialize(stream);
+				ToFile objnew = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
 				Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");
 
@@ -299,9 +297,9 @@ namespace mathstester
 			public static void Main(string[] args)
 			{
 			    ToFile.Deserialize();
-				var (userDifficulty, numberOfQuestions) = UserInputs();
-				ToFile.Serialize();
-				OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
+			    var (userDifficulty, numberOfQuestions) = UserInputs();
+			    ToFile.Serialize();
+			    OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 				Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
 
 				if (userDifficulty == UserDifficulty.Easy)
