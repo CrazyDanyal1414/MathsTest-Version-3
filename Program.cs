@@ -77,8 +77,6 @@ namespace mathstester
 			}
 		}
 
-		[Serializable]
-
 		public class OperationQuestionScore
 		{
 			public int AdditionQuestion { get; private set; }
@@ -94,13 +92,6 @@ namespace mathstester
 			public int SquareRootQuestion { get; private set; }
 			public int SquareRootScore { get; private set; }
 			public int TotalScore { get; set; }
-			public int NumberOfQuestions { get; }
-			public UserDifficulty UserDifficulty { get; }
-			public OperationQuestionScore(int numberOfQuestions, UserDifficulty userDifficulty)
-			{
-				NumberOfQuestions = numberOfQuestions;
-				UserDifficulty = userDifficulty;
-			}
 
 			public void Increment(MathOperation mathOperation, bool isCorrect)
             {
@@ -166,7 +157,7 @@ namespace mathstester
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
-			var score = new OperationQuestionScore(numberOfQuestionsLeft, userDifficulty);
+			var score = new OperationQuestionScore();
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -197,54 +188,8 @@ namespace mathstester
 			return score;
 		}
 
-		static void Deserialize()
+        static (UserDifficulty, int) UserInputs()
         {
-			OperationQuestionScore obj = null;
-			Stream stream = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
-			IFormatter formatter = new BinaryFormatter();
-			obj = (OperationQuestionScore)formatter.Deserialize(stream);
-			stream.Close();
-			Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.TotalScore}/{obj.NumberOfQuestions}");
-
-			double decimalScore = (double)(obj.TotalScore) / (double)(obj.NumberOfQuestions);
-
-
-			if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore <= 0.7))
-            {
-				Console.WriteLine($"You should stay on Easy difficulty");
-            }
-			else if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore > 0.7))
-			{
-				Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
-			}
-			else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore < 0.3))
-			{
-				Console.WriteLine($"Normal difficulty seems to be to hard for you:( You should go down to Easy difficulty");
-			}
-			else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore > 0.7))
-			{
-				Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
-			}
-			else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore <= 0.6))
-			{
-				Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
-			}
-			else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore > 0.6))
-			{
-				Console.WriteLine($"You are a maths Genius! Sadly for you this is the hardest level");
-			}
-            else
-			{
-				Console.WriteLine($"You should stay on Normal difficulty");
-			}
-
-			Console.ReadKey();
-			Console.Write(Environment.NewLine);
-
-		}
-  
-		public static void Main(string[] args)
-		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
 			difficultyDictionary.Add("N", UserDifficulty.Normal);
@@ -253,30 +198,106 @@ namespace mathstester
 			string userInputDifficulty;
 			int numberOfQuestions;
 
-			Deserialize();
-
 			do
 			{
 				Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
 				userInputDifficulty = Console.ReadLine().ToUpper();
 			} while (userInputDifficulty != "E" && userInputDifficulty != "N" && userInputDifficulty != "H");
 
+			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
+
 			do
 			{
 				Console.WriteLine("How many questions would you like to answer? Please type a number divisible by 10!");
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
-			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 
+			return (userDifficulty, numberOfQuestions);
+		}
+
+		[Serializable]
+		public class ToFile
+		{
+			public int TotalScore { get; set; }
+			public int NumberOfQuestions { get; }
+			public UserDifficulty UserDifficulty { get; }
+			public ToFile(int numberOfQuestions, UserDifficulty userDifficulty)
+			{
+				NumberOfQuestions = numberOfQuestions;
+				UserDifficulty = userDifficulty;
+			}
+			public static void Serialize()
+			{
+				var (userDifficulty, numberOfQuestions) = UserInputs();
+				OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
+				ToFile obj = new ToFile(numberOfQuestions, userDifficulty);
+				_ = obj.NumberOfQuestions;
+				_ = obj.UserDifficulty;
+				_ = obj.TotalScore;
+				Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
+				IFormatter formatter = new BinaryFormatter();
+				formatter.Serialize(stream, score);
+				stream.Close();
+			}
+			public static void Deserialize()
+			{
+				ToFile obj = null;
+				Stream stream = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
+				IFormatter formatter = new BinaryFormatter();
+				obj = (ToFile)formatter.Deserialize(stream);
+				stream.Close();
+				Console.WriteLine($"Last time you did the test on {obj.UserDifficulty} level and got {obj.TotalScore}/{obj.NumberOfQuestions}");
+
+				double decimalScore = (double)(obj.TotalScore) / (double)(obj.NumberOfQuestions);
+
+
+				if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore <= 0.7))
+				{
+					Console.WriteLine($"You should stay on Easy difficulty");
+				}
+				else if ((obj.UserDifficulty == UserDifficulty.Easy) && (decimalScore > 0.7))
+				{
+					Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
+				}
+				else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore <= 0.3))
+				{
+					Console.WriteLine($"Normal difficulty seems to be to hard for you:( You should go down to Easy difficulty");
+				}
+				else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore > 0.3) && (decimalScore <= 0.7))
+				{
+					Console.WriteLine($"You should stay on Normal difficulty");
+				}
+				else if ((obj.UserDifficulty == UserDifficulty.Normal) && (decimalScore > 0.7))
+				{
+					Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
+				}
+				else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore <= 0.3))
+				{
+					Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
+				}
+				else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore > 0.3) && (decimalScore <= 0.8))
+				{
+					Console.WriteLine($"You should stay on Hard difficulty");
+				}
+				else if ((obj.UserDifficulty == UserDifficulty.Hard) && (decimalScore > 0.8))
+				{
+					Console.WriteLine($"You are a maths Genius! Sadly this is the hardest level");
+				}
+
+				Console.ReadKey();
+				Console.Write(Environment.NewLine);
+
+			}
+		}
+
+		public static void Main(string[] args)
+		{
+			ToFile.Deserialize();
+
+
+			var(userDifficulty, numberOfQuestions) = UserInputs();
+			ToFile.Serialize();
 			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
-            _ = score.NumberOfQuestions;
-			_ = score.UserDifficulty;
-            _ = score.TotalScore;
-			Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
-			IFormatter formatter = new BinaryFormatter();
-			formatter.Serialize(stream, score);
-			stream.Close();
-
 			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
