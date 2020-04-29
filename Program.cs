@@ -234,18 +234,17 @@ namespace mathstester
 				_ = obj.NumberOfQuestions;
 				_ = obj.UserDifficulty;
 				_ = obj.TotalScore;
-				Stream stream = new FileStream("Example.txt", FileMode.Create, FileAccess.Write);
+				Stream stream = new FileStream(@"Examples.txt", FileMode.Create, FileAccess.Write);
 				BinaryFormatter formatter = new BinaryFormatter();
 				formatter.Serialize(stream, obj);
 				stream.Close();
 			}
-
-			[OnDeserialized]
 			public static void Deserialize()
 			{
-				Stream stream = new FileStream("Example.txt", FileMode.Open, FileAccess.Read);
+				ToFile objnew = null;
+                Stream stream = new FileStream(@"Examples.txt", FileMode.Open, FileAccess.Read);
 				BinaryFormatter formatter = new BinaryFormatter();
-				ToFile objnew = (ToFile)formatter.Deserialize(stream);
+				objnew = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
 				Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");
 
