@@ -221,15 +221,15 @@ namespace mathstester
 			public int TotalScore { get; private set; }
 			public int NumberOfQuestions { get; }
 			public UserDifficulty UserDifficulty { get; }
-			public ToFile(int numberOfQuestions, UserDifficulty userDifficulty)
+			public ToFile(int numberOfQuestions, UserDifficulty userDifficulty, int totalScore)
 			{
 				NumberOfQuestions = numberOfQuestions;
 				UserDifficulty = userDifficulty;
+				TotalScore = totalScore;
 			}
-			public static void Serialize()
+			public static void Serialize(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty)
 			{
-				var (userDifficulty, numberOfQuestions) = UserInputs();
-				ToFile obj = new ToFile(numberOfQuestions, userDifficulty);
+				ToFile obj = new ToFile(numberOfQuestions, userDifficulty, totalScore);
 				_ = obj.NumberOfQuestions;
 				_ = obj.UserDifficulty;
 				_ = obj.TotalScore;
@@ -321,6 +321,7 @@ namespace mathstester
 					Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
 					Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
 				}
+			    ToFile.Serialize(numberOfQuestions, score.TotalScore, userDifficulty);
 			}
 	}
 }
