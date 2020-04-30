@@ -238,66 +238,73 @@ namespace mathstester
 				formatter.Serialize(stream, obj);
 				stream.Close();
 			}
-			public static void Deserialize()
+			public static ToFile Deserialize()
 			{
                 Stream stream = new FileStream("D:\\Example.txt", FileMode.Open, FileAccess.Read);
 				IFormatter formatter = new BinaryFormatter();
 				ToFile objnew = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
-				Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");
-
-				double decimalScore = (double)objnew.TotalScore / (double)objnew.NumberOfQuestions;
-
-				if (objnew.UserDifficulty == UserDifficulty.Easy)
-				{
-					if (decimalScore <= 0.7)
-					{
-						Console.WriteLine($"You should stay on Easy difficulty");
-					}
-					else
-					{
-						Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
-					}
-				}
-				else if (objnew.UserDifficulty == UserDifficulty.Normal)
-				{
-					if (decimalScore <= 0.3)
-					{
-						Console.WriteLine($"Normal difficulty seems to be to hard for you:( You should go down to Easy difficulty");
-					}
-					else if ((decimalScore > 0.3) && (decimalScore <= 0.7))
-					{
-						Console.WriteLine($"You should stay on Normal difficulty");
-					}
-					else
-					{
-						Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
-					}
-				}
-				else if (objnew.UserDifficulty == UserDifficulty.Hard)
-				{
-					if (decimalScore <= 0.3)
-					{
-						Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
-					}
-					else if ((decimalScore > 0.3) && (decimalScore <= 0.8))
-					{
-						Console.WriteLine($"You should stay on Hard difficulty");
-					}
-					else
-					{
-						Console.WriteLine($"You are a maths Genius! Sadly this is the hardest level");
-					}
-				}
-				Console.ReadKey();
-				Console.Write(Environment.NewLine);
+				return objnew;
 			}
+		}
+
+        public static void SuggestingDifficulty()
+        {
+			ToFile objnew = ToFile.Deserialize();
+
+            Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");
+			double decimalScore = (double)objnew.TotalScore / (double)objnew.NumberOfQuestions;
+
+			if (objnew.UserDifficulty == UserDifficulty.Easy)
+				{
+				if (decimalScore <= 0.7)
+				{
+					Console.WriteLine($"You should stay on Easy difficulty");
+				}
+				else
+				{
+					Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
+				}
+			}
+				else if (objnew.UserDifficulty == UserDifficulty.Normal)
+			{
+				if (decimalScore <= 0.3)
+				{
+					Console.WriteLine($"Normal difficulty seems to be to hard for you:( You should go down to Easy difficulty");
+				}
+				else if ((decimalScore > 0.3) && (decimalScore <= 0.7))
+				{
+					Console.WriteLine($"You should stay on Normal difficulty");
+				}
+				else
+				{
+					Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
+				}
+			}
+			else if (objnew.UserDifficulty == UserDifficulty.Hard)
+			{
+				if (decimalScore <= 0.3)
+				{
+					Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
+				}
+				else if ((decimalScore > 0.3) && (decimalScore <= 0.8))
+				{
+					Console.WriteLine($"You should stay on Hard difficulty");
+				}
+				else
+				{
+					Console.WriteLine($"You are a maths Genius! Sadly this is the hardest level");
+				}
+			}
+			Console.ReadKey();
+			Console.Write(Environment.NewLine);
 		}
 
 			public static void Main(string[] args)
 			{
-			    ToFile.Deserialize();
-			    var (userDifficulty, numberOfQuestions) = UserInputs();
+			    SuggestingDifficulty();
+
+				var (userDifficulty, numberOfQuestions) = UserInputs();
 			    OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 				Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
 
