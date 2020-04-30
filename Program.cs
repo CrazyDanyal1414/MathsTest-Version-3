@@ -230,9 +230,6 @@ namespace mathstester
 			public static void Serialize(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty)
 			{
 				ToFile obj = new ToFile(numberOfQuestions, userDifficulty, totalScore);
-				_ = obj.NumberOfQuestions;
-				_ = obj.UserDifficulty;
-				_ = obj.TotalScore;
 				IFormatter formatter = new BinaryFormatter();
 				Stream stream = new FileStream("D:\\Example.txt", FileMode.Create, FileAccess.Write);
 				formatter.Serialize(stream, obj);
@@ -247,6 +244,11 @@ namespace mathstester
 				return objnew;
 			}
 		}
+
+        public class PrntToFile
+        {
+
+        }
 
         public static void SuggestingDifficulty()
         {
