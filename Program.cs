@@ -238,7 +238,11 @@ namespace mathstester
 				UserDifficulty = userDifficulty;
 				TotalScore = totalScore;
 			}
-			public static void Serialize(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty)
+		}
+
+        public class SaveToFile
+        {
+            public static void Serialize(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty)
 			{
 				ToFile obj = new ToFile(numberOfQuestions, userDifficulty, totalScore);
 				IFormatter formatter = new BinaryFormatter();
@@ -248,7 +252,7 @@ namespace mathstester
 			}
 			public static ToFile Deserialize()
 			{
-                Stream stream = new FileStream("D:\\Example.txt", FileMode.Open, FileAccess.Read);
+				Stream stream = new FileStream("D:\\Example.txt", FileMode.Open, FileAccess.Read);
 				IFormatter formatter = new BinaryFormatter();
 				ToFile objnew = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
@@ -258,7 +262,7 @@ namespace mathstester
 
         public static UserDifficulty SuggestingDifficulty()
         {
-			ToFile objnew = ToFile.Deserialize();
+			ToFile objnew = SaveToFile.Deserialize();
 			UserDifficulty userDifficulty = UserDifficulty.Easy;
 
 			Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");
@@ -349,7 +353,7 @@ namespace mathstester
 					Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
 					Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
 				}
-			    ToFile.Serialize(numberOfQuestions, score.TotalScore, userDifficulty);
+			    SaveToFile.Serialize(numberOfQuestions, score.TotalScore, userDifficulty);
 			}
 	}
 }
