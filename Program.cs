@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -188,21 +189,31 @@ namespace mathstester
 			return score;
 		}
 
-		static (UserDifficulty, int) UserInputs()
+		static (UserDifficulty, int, string) UserInputs()
 		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
 			difficultyDictionary.Add("N", UserDifficulty.Normal);
 			difficultyDictionary.Add("H", UserDifficulty.Hard);
 
-			string userInputDifficulty;
+			string userInputDifficulty = "E";
 			int numberOfQuestions;
+			string autoDifficultyInput;
 
 			do
 			{
-				Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
-				userInputDifficulty = Console.ReadLine().ToUpper();
-			} while (userInputDifficulty != "E" && userInputDifficulty != "N" && userInputDifficulty != "H");
+				Console.WriteLine("Would you like to continue with the suggested difficulty? Please type 'Y' or 'N'");
+				autoDifficultyInput = Console.ReadLine().Substring(0).ToUpper();
+			} while (autoDifficultyInput != "Y" && autoDifficultyInput != "N");
+
+            if (autoDifficultyInput == "N")
+            {
+				do
+				{
+					Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
+					userInputDifficulty = Console.ReadLine().ToUpper();
+				} while (userInputDifficulty != "E" && userInputDifficulty != "N" && userInputDifficulty != "H");
+			}
 
 			UserDifficulty userDifficulty = difficultyDictionary[userInputDifficulty];
 
@@ -212,7 +223,7 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			return (userDifficulty, numberOfQuestions);
+			return (userDifficulty, numberOfQuestions, autoDifficultyInput);
 		}
 
 		[Serializable]
@@ -302,24 +313,14 @@ namespace mathstester
 					userDifficulty = UserDifficulty.Hard;
 				}
 			}
-			Console.ReadKey();
-			Console.Write(Environment.NewLine);
 			return userDifficulty;
 		}
 
 			public static void Main(string[] args)
 			{
 			    UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
-				var (userDifficulty, numberOfQuestions) = UserInputs();
-			    string autoDifficultyInput;
-
-
-				do
-			    {
-				    Console.WriteLine("Would you like to continue with the suggested difficulty? Please type 'Y' or 'N'");
-				    autoDifficultyInput = Console.ReadLine().ToUpper();
-			    } while (autoDifficultyInput != "Y" && autoDifficultyInput != "N");
-
+                var (userDifficulty, numberOfQuestions, autoDifficultyInput) = UserInputs();
+			  
 				if (autoDifficultyInput == "Y")
                 {
 				    userDifficulty = userSuggestingDifficulty;
