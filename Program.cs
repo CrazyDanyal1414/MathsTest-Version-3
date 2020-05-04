@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 
 namespace mathstester
 {
@@ -189,7 +189,7 @@ namespace mathstester
 			return score;
 		}
 
-		static (UserDifficulty, int, string) UserInputs()
+		static (UserDifficulty, int, string, int) UserInputs()
 		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
@@ -199,6 +199,7 @@ namespace mathstester
 			string userInputDifficulty = "E";
 			int numberOfQuestions;
 			string autoDifficultyInput;
+			int numberOfSeconds;
 
 			do
 			{
@@ -223,7 +224,13 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			return (userDifficulty, numberOfQuestions, autoDifficultyInput);
+			do
+			{
+				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 10!");
+				int.TryParse(Console.ReadLine(), out numberOfSeconds);
+			} while (numberOfSeconds % 10 != 0);
+
+			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
 		}
 
 		[Serializable]
@@ -320,40 +327,57 @@ namespace mathstester
 			return userDifficulty;
 		}
 
-			public static void Main(string[] args)
+		class WorkingWithTimer
+		{
+			public static void CountTimer(object time)
 			{
-			    UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
-                var (userDifficulty, numberOfQuestions, autoDifficultyInput) = UserInputs();
-			  
-				if (autoDifficultyInput == "Y")
-                {
-				    userDifficulty = userSuggestingDifficulty;
-				}
-
-			    OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
-				Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
-
-				if (userDifficulty == UserDifficulty.Easy)
+				var timeLeft = (int)time;
+				do
 				{
-					Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
-					Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
-					Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
-				}
-				else if (userDifficulty == UserDifficulty.Normal)
-				{
-					Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
-					Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
-					Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
-					Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
-				}
-				else if (userDifficulty == UserDifficulty.Hard)
-				{
-					Console.WriteLine($"Multipication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
-					Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
-					Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
-					Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
-				}
-			    SaveToFile.Serialize(numberOfQuestions, score.TotalScore, userDifficulty);
+					Console.WriteLine($"TimeLeft: {timeLeft}");
+					timeLeft--;
+				} while (timeLeft >= 0);
 			}
+		}
+
+		public static void Main(string[] args)
+		{
+		    UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
+            var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
+
+			Timer t = new Timer(WorkingWithTimer.CountTimer, numberOfSeconds, 1, 1000);
+			Thread.Sleep(1000);
+			t.Dispose();
+
+			if (autoDifficultyInput == "Y")
+            {
+			    userDifficulty = userSuggestingDifficulty;
+			}
+
+		    OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
+			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
+
+			if (userDifficulty == UserDifficulty.Easy)
+			{
+				Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
+                Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
+				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+			}
+			else if (userDifficulty == UserDifficulty.Normal)
+			{
+                Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
+				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
+				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
+			}
+            else if (userDifficulty == UserDifficulty.Hard)
+			{
+				Console.WriteLine($"Multipication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
+                Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
+				Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
+			}
+		    SaveToFile.Serialize(numberOfQuestions, score.TotalScore, userDifficulty);
+		}
 	}
 }
