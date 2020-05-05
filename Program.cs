@@ -330,13 +330,12 @@ namespace mathstester
 
         public class TimerClass
         {
-			public static int Timers()
+			public static int Timers(int timeLeft)
 			{
-				int timeLeft = 30;
 				do
 				{
-					timeLeft--;
 					Console.WriteLine($"timeLeft: {timeLeft}");
+					timeLeft--;
 					Thread.Sleep(1000);
 				} while (timeLeft > 0);
                 return timeLeft;
@@ -353,7 +352,7 @@ namespace mathstester
 			    userDifficulty = userSuggestingDifficulty;
 			}
 
-			int o = TimerClass.Timers();
+			TimerClass.Timers(numberOfSeconds);
 
 		    OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
