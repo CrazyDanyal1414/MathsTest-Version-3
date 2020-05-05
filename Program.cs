@@ -334,11 +334,12 @@ namespace mathstester
 			{
 				do
 				{
-					Console.WriteLine($"timeLeft: {timeLeft}");
+					Console.Write("\rtimeLeft: {0} ", timeLeft);
 					timeLeft--;
 					Thread.Sleep(1000);
 				} while (timeLeft > 0);
-                return timeLeft;
+				Console.Write(Environment.NewLine);
+				return timeLeft;
 			}
 		}
 
