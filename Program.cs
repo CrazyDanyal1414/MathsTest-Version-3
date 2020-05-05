@@ -190,7 +190,7 @@ namespace mathstester
 			return score;
 		}
 
-		static (UserDifficulty, int, string) UserInputs()
+		static (UserDifficulty, int, string, int) UserInputs()
 		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
@@ -200,6 +200,7 @@ namespace mathstester
 			string userInputDifficulty = "E";
 			int numberOfQuestions;
 			string autoDifficultyInput;
+			int numberOfSeconds;
 
 			do
 			{
@@ -224,7 +225,13 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			return (userDifficulty, numberOfQuestions, autoDifficultyInput);
+			do
+			{
+				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 10!");
+				int.TryParse(Console.ReadLine(), out numberOfSeconds);
+			} while (numberOfSeconds % 10 != 0);
+
+			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
 		}
 
 		[Serializable]
@@ -321,15 +328,32 @@ namespace mathstester
 			return userDifficulty;
 		}
 
+        public class TimerClass
+        {
+			public static int Timers()
+			{
+				int timeLeft = 30;
+				do
+				{
+					timeLeft--;
+					Console.WriteLine($"timeLeft: {timeLeft}");
+					Thread.Sleep(1000);
+				} while (timeLeft > 0);
+                return timeLeft;
+			}
+		}
+
 		public static void Main(string[] args)
 	    {
 		    UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
-            var (userDifficulty, numberOfQuestions, autoDifficultyInput) = UserInputs();
+            var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
 
 			if (autoDifficultyInput == "Y")
             {
 			    userDifficulty = userSuggestingDifficulty;
 			}
+
+			int o = TimerClass.Timers();
 
 		    OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
