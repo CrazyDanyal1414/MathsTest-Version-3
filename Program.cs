@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace mathstester
 {
@@ -189,7 +190,7 @@ namespace mathstester
 			return score;
 		}
 
-		static (UserDifficulty, int, string, int) UserInputs()
+		static (UserDifficulty, int, string) UserInputs()
 		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
@@ -199,7 +200,6 @@ namespace mathstester
 			string userInputDifficulty = "E";
 			int numberOfQuestions;
 			string autoDifficultyInput;
-			int numberOfSeconds;
 
 			do
 			{
@@ -224,13 +224,7 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			do
-			{
-				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 10!");
-				int.TryParse(Console.ReadLine(), out numberOfSeconds);
-			} while (numberOfSeconds % 10 != 0);
-
-			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
+			return (userDifficulty, numberOfQuestions, autoDifficultyInput);
 		}
 
 		[Serializable]
@@ -327,27 +321,10 @@ namespace mathstester
 			return userDifficulty;
 		}
 
-		class WorkingWithTimer
-		{
-			public static void CountTimer(object time)
-			{
-				var timeLeft = (int)time;
-				do
-				{
-					Console.WriteLine($"TimeLeft: {timeLeft}");
-					timeLeft--;
-				} while (timeLeft >= 0);
-			}
-		}
-
 		public static void Main(string[] args)
-		{
+	    {
 		    UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
-            var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
-
-			Timer t = new Timer(WorkingWithTimer.CountTimer, numberOfSeconds, 1, 1000);
-			Thread.Sleep(1000);
-			t.Dispose();
+            var (userDifficulty, numberOfQuestions, autoDifficultyInput) = UserInputs();
 
 			if (autoDifficultyInput == "Y")
             {
