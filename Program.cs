@@ -328,7 +328,7 @@ namespace mathstester
 			return userDifficulty;
 		}
 
-        public class TimerClass
+		public class TimerClass
         {
 			public static int Timers(int timeLeft)
 			{
@@ -352,10 +352,12 @@ namespace mathstester
             {
 			    userDifficulty = userSuggestingDifficulty;
 			}
+			Thread thread = new Thread(new ThreadStart(() => {
+				TimerClass.Timers(numberOfSeconds);
+			}));
+			thread.Start();
 
-			TimerClass.Timers(numberOfSeconds);
-
-		    OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
+			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
