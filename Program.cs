@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
-using System.Windows.Threading;
+using System.Windows.Forms;
 
 namespace mathstester
 {
@@ -155,7 +155,52 @@ namespace mathstester
 			}
 		}
 
-		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+        class RunWithTimer
+        {
+			public static void Timer(int numberOfSeconds)
+			{
+				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
+				while (DateTime.Now < whenToStop)
+				{
+					var timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
+					WriteToScreen($"Time Remaining: {timeLeft}", true);
+					Thread.Sleep(1000);
+				}
+			}
+
+			public static string ReadInput()
+			{
+				string input = Console.ReadLine();
+				Console.Write(new string(' ', 100));
+				Console.CursorLeft = 0;
+				return input;
+			}
+
+			static object lockObject = new object();
+
+			public static void WriteToScreen(string message, bool resetCursor)
+			{
+				lock (lockObject)
+				{
+					if (resetCursor)
+					{
+						int leftPos = Console.CursorLeft;
+						Console.WriteLine();
+						Console.Write(message.PadRight(50, ' '));
+						Console.CursorTop--;
+						Console.CursorLeft = leftPos;
+					}
+					else
+					{
+						Console.WriteLine(message);
+						Console.Write(new string(' ', 100));
+						Console.CursorLeft = 0;
+					}
+				}
+			}
+		}
+
+			public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
@@ -167,22 +212,22 @@ namespace mathstester
 				var (message, correctAnswer) = GetMathsEquation(mathOperation, userDifficulty);
 				if (mathRandomOperation == 4 || mathRandomOperation == 6)
 				{
-					Console.Write($"To the nearest integer, What is {message} =");
+					RunWithTimer.WriteToScreen($"To the nearest integer, What is {message} =", false);
 				}
 				else
 				{
-					Console.Write($"What is {message} =");
+					RunWithTimer.WriteToScreen($"What is {message} =", false);
 				}
 
-				double userAnswer = Convert.ToDouble(Console.ReadLine());
+				double userAnswer = Convert.ToDouble(RunWithTimer.ReadInput());
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
-					Console.WriteLine("Well Done!");
+					RunWithTimer.WriteToScreen("Well Done!", false);
 					score.Increment(mathOperation, true);
 				}
 				else
 				{
-					Console.WriteLine("Your answer is incorrect!");
+					RunWithTimer.WriteToScreen("Your answer is incorrect!", false);
 					score.Increment(mathOperation, false);
 				}
 				numberOfQuestionsLeft--;
@@ -328,21 +373,6 @@ namespace mathstester
 			return userDifficulty;
 		}
 
-		public class TimerClass
-        {
-			public static int Timers(int timeLeft)
-			{
-				do
-				{
-					Console.Write("\rtimeLeft: {0} ", timeLeft);
-					timeLeft--;
-					Thread.Sleep(1000);
-				} while (timeLeft > 0);
-				Console.Write(Environment.NewLine);
-				return timeLeft;
-			}
-		}
-
 		public static void Main(string[] args)
 	    {
 		    UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
@@ -352,8 +382,10 @@ namespace mathstester
             {
 			    userDifficulty = userSuggestingDifficulty;
 			}
+
+
 			Thread thread = new Thread(new ThreadStart(() => {
-				TimerClass.Timers(numberOfSeconds);
+				RunWithTimer.Timer(numberOfSeconds);
 			}));
 			thread.Start();
 
