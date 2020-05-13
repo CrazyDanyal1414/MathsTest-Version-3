@@ -162,7 +162,7 @@ namespace mathstester
 				var timeLeft = "";
 				while (DateTime.Now < whenToStop)
 				{
-					timeLeft = (whenToStop - DateTime.Now).ToString("ss");
+					timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
 					WriteToScreen($"Time Remaining: {timeLeft}", true);
 					Thread.Sleep(1000);
 				}
@@ -240,7 +240,7 @@ namespace mathstester
 				}
 				numberOfQuestionsLeft--;
 
-				if (timeLeft == "00")
+				if (timeLeft == "00:00:00")
 				{
 					numberOfQuestionsLeft = 0;
 					Console.WriteLine("Times Up!");
