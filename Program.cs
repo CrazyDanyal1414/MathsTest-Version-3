@@ -4,7 +4,6 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace mathstester
 {
@@ -30,7 +29,7 @@ namespace mathstester
 		public static (int operationMin, int operationMax) GetPossibleOperationsByDifficulty(UserDifficulty userDifficulty)
 		{
 
-			switch (userDifficulty)
+            switch (userDifficulty)
 			{
 				case UserDifficulty.Easy:
 					return (1, 4);
@@ -157,15 +156,17 @@ namespace mathstester
 
         class RunWithTimer
         {
-			public static void Timer(int numberOfSeconds)
+			public static string Timer(int numberOfSeconds)
 			{
 				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
+				var timeLeft = "";
 				while (DateTime.Now < whenToStop)
 				{
-					var timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
+					timeLeft = (whenToStop - DateTime.Now).ToString("ss");
 					WriteToScreen($"Time Remaining: {timeLeft}", true);
 					Thread.Sleep(1000);
 				}
+				return timeLeft;
 			}
 
 			public static string ReadInput()
@@ -200,11 +201,24 @@ namespace mathstester
 			}
 		}
 
-			public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
 			var score = new OperationQuestionScore();
+			int numberOfSeconds;
+			do
+			{
+				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 10!");
+				int.TryParse(Console.ReadLine(), out numberOfSeconds);
+			} while (numberOfSeconds % 10 != 0);
+
+			string timeLeft = "";
+			Thread thread = new Thread(new ThreadStart(() => {
+				timeLeft = RunWithTimer.Timer(numberOfSeconds);
+			}));
+			thread.Start();
+
 			while (numberOfQuestionsLeft > 0)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
@@ -231,11 +245,21 @@ namespace mathstester
 					score.Increment(mathOperation, false);
 				}
 				numberOfQuestionsLeft--;
+
+				if (timeLeft == "00")
+				{
+					numberOfQuestionsLeft = 0;
+					Console.WriteLine("Times Up!");
+				}
+                else if (numberOfQuestionsLeft == 0)
+                {
+					thread.Abort();
+                }
 			}
 			return score;
 		}
 
-		static (UserDifficulty, int, string, int) UserInputs()
+		static (UserDifficulty, int, string) UserInputs()
 		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
@@ -245,7 +269,6 @@ namespace mathstester
 			string userInputDifficulty = "E";
 			int numberOfQuestions;
 			string autoDifficultyInput;
-			int numberOfSeconds;
 
 			do
 			{
@@ -270,13 +293,7 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			do
-			{
-				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 10!");
-				int.TryParse(Console.ReadLine(), out numberOfSeconds);
-			} while (numberOfSeconds % 10 != 0);
-
-			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
+			return (userDifficulty, numberOfQuestions, autoDifficultyInput);
 		}
 
 		[Serializable]
@@ -376,20 +393,15 @@ namespace mathstester
 		public static void Main(string[] args)
 	    {
 		    UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
-            var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
+            var (userDifficulty, numberOfQuestions, autoDifficultyInput) = UserInputs();
 
 			if (autoDifficultyInput == "Y")
             {
 			    userDifficulty = userSuggestingDifficulty;
 			}
 
+			var score = RunTest(numberOfQuestions, userDifficulty);
 
-			Thread thread = new Thread(new ThreadStart(() => {
-				RunWithTimer.Timer(numberOfSeconds);
-			}));
-			thread.Start();
-
-			OperationQuestionScore score = RunTest(numberOfQuestions, userDifficulty);
 			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
 
 			if (userDifficulty == UserDifficulty.Easy)
