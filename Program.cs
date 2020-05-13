@@ -201,17 +201,11 @@ namespace mathstester
 			}
 		}
 
-		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty)
+		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty, int numberOfSeconds)
 		{
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
 			var score = new OperationQuestionScore();
-			int numberOfSeconds;
-			do
-			{
-				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 10!");
-				int.TryParse(Console.ReadLine(), out numberOfSeconds);
-			} while (numberOfSeconds % 10 != 0);
 
 			string timeLeft = "";
 			Thread thread = new Thread(new ThreadStart(() => {
@@ -253,13 +247,13 @@ namespace mathstester
 				}
                 else if (numberOfQuestionsLeft == 0)
                 {
-					thread.Abort();
+                    thread.Abort();
                 }
 			}
 			return score;
 		}
 
-		static (UserDifficulty, int, string) UserInputs()
+		static (UserDifficulty, int, string, int) UserInputs()
 		{
 			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
 			difficultyDictionary.Add("E", UserDifficulty.Easy);
@@ -269,6 +263,7 @@ namespace mathstester
 			string userInputDifficulty = "E";
 			int numberOfQuestions;
 			string autoDifficultyInput;
+			int numberOfSeconds;
 
 			do
 			{
@@ -293,7 +288,13 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out numberOfQuestions);
 			} while (numberOfQuestions % 10 != 0);
 
-			return (userDifficulty, numberOfQuestions, autoDifficultyInput);
+			do
+			{
+				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 10!");
+				int.TryParse(Console.ReadLine(), out numberOfSeconds);
+			} while (numberOfSeconds % 10 != 0);
+
+			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
 		}
 
 		[Serializable]
@@ -393,14 +394,14 @@ namespace mathstester
 		public static void Main(string[] args)
 	    {
 		    UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
-            var (userDifficulty, numberOfQuestions, autoDifficultyInput) = UserInputs();
+            var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
 
 			if (autoDifficultyInput == "Y")
             {
 			    userDifficulty = userSuggestingDifficulty;
 			}
 
-			var score = RunTest(numberOfQuestions, userDifficulty);
+			var score = RunTest(numberOfQuestions, userDifficulty, numberOfSeconds);
 
 			Console.WriteLine($"Total score: {score.TotalScore} of {numberOfQuestions}");
 
