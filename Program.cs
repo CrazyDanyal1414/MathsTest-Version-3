@@ -230,12 +230,16 @@ namespace mathstester
 				double userAnswer = Convert.ToDouble(RunWithTimer.ReadInput());
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
+					Console.ForegroundColor = ConsoleColor.Green;
 					RunWithTimer.WriteToScreen("Well Done!", false);
+					Console.ResetColor();
 					score.Increment(mathOperation, true);
 				}
 				else
 				{
+					Console.ForegroundColor = ConsoleColor.Red;
 					RunWithTimer.WriteToScreen("Your answer is incorrect!", false);
+					Console.ResetColor();
 					score.Increment(mathOperation, false);
 				}
 				numberOfQuestionsLeft--;
