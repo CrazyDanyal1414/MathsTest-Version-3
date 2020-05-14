@@ -177,7 +177,7 @@ namespace mathstester
 				return input;
 			}
 
-			static object lockObject = new object();
+			static readonly object lockObject = new object();
 
 			public static void WriteToScreen(string message, bool resetCursor)
 			{
@@ -259,12 +259,14 @@ namespace mathstester
 
 		static (UserDifficulty, int, string, int) UserInputs()
 		{
-			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>();
-			difficultyDictionary.Add("E", UserDifficulty.Easy);
-			difficultyDictionary.Add("N", UserDifficulty.Normal);
-			difficultyDictionary.Add("H", UserDifficulty.Hard);
+            Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>
+            {
+                { "E", UserDifficulty.Easy },
+                { "N", UserDifficulty.Normal },
+                { "H", UserDifficulty.Hard }
+            };
 
-			string userInputDifficulty = "E";
+            string userInputDifficulty = "E";
 			int numberOfQuestions;
 			string autoDifficultyInput;
 			int numberOfSeconds;
