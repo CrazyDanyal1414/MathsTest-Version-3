@@ -279,7 +279,7 @@ namespace mathstester
             {
 				do
 				{
-					Console.WriteLine("What difficulty level would you like to do! Please type E for Easy, N for Normal and H for hard");
+					Console.WriteLine("Which difficulty level would you like to do! Please type E for Easy, N for Normal and H for Hard");
 					userInputDifficulty = Console.ReadLine().ToUpper();
 				} while (userInputDifficulty != "E" && userInputDifficulty != "N" && userInputDifficulty != "H");
 			}
@@ -294,9 +294,9 @@ namespace mathstester
 
 			do
 			{
-				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 10!");
+				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 30!");
 				int.TryParse(Console.ReadLine(), out numberOfSeconds);
-			} while (numberOfSeconds % 10 != 0);
+			} while (numberOfSeconds % 30 != 0);
 
 			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
 		}
@@ -352,7 +352,7 @@ namespace mathstester
 				}
 				else
 				{
-					Console.WriteLine($"Easy difficulty seems to easy for you! You should go up to Normal difficulty");
+					Console.WriteLine($"Easy difficulty seems to easy for you💪! You should go up to Normal difficulty");
 					userDifficulty = UserDifficulty.Normal;
 				}
 			}
@@ -360,7 +360,7 @@ namespace mathstester
 			{
 				if (decimalScore <= 0.3)
 				{
-					Console.WriteLine($"Normal difficulty seems to be to hard for you:( You should go down to Easy difficulty");
+					Console.WriteLine($"Normal difficulty seems to be to hard for you☹️. You should go down to Easy difficulty");
 					userDifficulty = UserDifficulty.Easy;
 				}
 				else if ((decimalScore > 0.3) && (decimalScore <= 0.7))
@@ -370,7 +370,7 @@ namespace mathstester
 				}
 				else
 				{
-					Console.WriteLine($"Normal difficulty seems to easy for you! You should go up to Hard difficulty");
+					Console.WriteLine($"Normal difficulty seems to easy for you💪! You should go up to Hard difficulty");
 					userDifficulty = UserDifficulty.Hard;
 				}
 			}
@@ -378,7 +378,7 @@ namespace mathstester
 			{
 				if (decimalScore <= 0.3)
 				{
-					Console.WriteLine($"Hard difficulty seems to hard for you:( You should go down to Normal difficulty");
+					Console.WriteLine($"Hard difficulty seems to hard for you☹️. You should go down to Normal difficulty");
 					userDifficulty = UserDifficulty.Normal;
 				}
 				else if ((decimalScore > 0.3) && (decimalScore <= 0.8))
@@ -388,7 +388,7 @@ namespace mathstester
 				}
 				else
 				{
-					Console.WriteLine($"You are a maths Genius! Sadly this is the hardest level");
+					Console.WriteLine($"You are a maths Genius🥳! Sadly this is the hardest level");
 					userDifficulty = UserDifficulty.Hard;
 				}
 			}
