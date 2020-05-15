@@ -154,20 +154,47 @@ namespace mathstester
 			}
 		}
 
-        class RunWithTimer
-        {
+		class RunWithTimer
+		{
+			public bool IsTimeLeft { get; }
 			public static string Timer(int numberOfSeconds)
 			{
-				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
-				var timeLeft = "";
-				while (DateTime.Now < whenToStop)
+			    var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
+				string timeLeft = "";
+                while (DateTime.Now < whenToStop)
 				{
-					timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
-					WriteToScreen($"Time Remaining: {timeLeft}", true);
+                    timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
+                    WriteToScreen($"Time Remaining: {timeLeft}", true);
 					Thread.Sleep(1000);
 				}
 				return timeLeft;
 			}
+
+			public RunWithTimer(int numberOfSeconds)
+			{
+				string timeLeft = "";
+                Thread thread = new Thread(new ThreadStart(() =>
+				{
+					timeLeft = Timer(numberOfSeconds);
+				}));
+				thread.Start();
+                if (timeLeft == "00:00:00")
+                {
+					IsTimeLeft = false;
+                }
+                else
+                {
+					IsTimeLeft = true;
+                }
+			}
+
+			/*public void StopTimer(int numberOfQuestionsLeft)
+			{
+				if (numberOfQuestionsLeft == 0)
+				{
+					thread.Abort();
+				}
+			}*/
 
 			public static string ReadInput()
 			{
@@ -207,13 +234,9 @@ namespace mathstester
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
 			var score = new OperationQuestionScore();
 
-			string timeLeft = "";
-			Thread thread = new Thread(new ThreadStart(() => {
-				timeLeft = RunWithTimer.Timer(numberOfSeconds);
-			}));
-			thread.Start();
+			RunWithTimer runWithTimer = new RunWithTimer(numberOfSeconds);
 
-			while (numberOfQuestionsLeft > 0)
+			while (numberOfQuestionsLeft > 0 && runWithTimer.IsTimeLeft)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
 				MathOperation mathOperation = (MathOperation)mathRandomOperation;
@@ -243,16 +266,6 @@ namespace mathstester
 					score.Increment(mathOperation, false);
 				}
 				numberOfQuestionsLeft--;
-
-				if (timeLeft == "00:00:00")
-				{
-					numberOfQuestionsLeft = 0;
-					Console.WriteLine("Times Up!");
-				}
-                else if (numberOfQuestionsLeft == 0)
-                {
-                    thread.Abort();
-                }
 			}
 			return score;
 		}
