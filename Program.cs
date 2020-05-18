@@ -168,14 +168,14 @@ namespace mathstester
 				}
 			}
 
+			Thread timerThread;
 			public RunWithTimer(int numberOfSeconds)
 			{
-				Thread timerThread = new Thread(new ThreadStart(() =>
+				timerThread = new Thread(new ThreadStart(() =>
 				{
 					Timer(numberOfSeconds);
 				}));
 				timerThread.Start();
-
 				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
 				if (DateTime.Now < whenToStop)
 				{
@@ -186,7 +186,6 @@ namespace mathstester
 					IsTimeLeft = false;
 				}
 			}
-            /*
             public void StopTimer(int numberOfQuestionsLeft)
 			{
 				if (numberOfQuestionsLeft == 0)
@@ -194,7 +193,6 @@ namespace mathstester
 					timerThread.Abort();
 				}
 			}
-            */
 			public static string ReadInput()
 			{
 				string input = Console.ReadLine();
@@ -264,6 +262,7 @@ namespace mathstester
 					score.Increment(mathOperation, false);
 				}
 				numberOfQuestionsLeft--;
+				RunWithTimer.StopTimer(numberOfQuestionsLeft);
 			}
 			return score;
 		}
