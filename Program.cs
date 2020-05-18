@@ -157,45 +157,44 @@ namespace mathstester
 		class RunWithTimer
 		{
 			public bool IsTimeLeft { get; }
-			public static string Timer(int numberOfSeconds)
+			public static void Timer(int numberOfSeconds)
 			{
 			    var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
-				string timeLeft = "";
-                while (DateTime.Now < whenToStop)
+				while (DateTime.Now < whenToStop)
 				{
-                    timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
-                    WriteToScreen($"Time Remaining: {timeLeft}", true);
+					string timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
+					WriteToScreen($"Time Remaining: {timeLeft}", true);
 					Thread.Sleep(1000);
 				}
-				return timeLeft;
 			}
 
 			public RunWithTimer(int numberOfSeconds)
 			{
-				string timeLeft = "";
-                Thread thread = new Thread(new ThreadStart(() =>
+				Thread timerThread = new Thread(new ThreadStart(() =>
 				{
-					timeLeft = Timer(numberOfSeconds);
+					Timer(numberOfSeconds);
 				}));
-				thread.Start();
-                if (timeLeft == "00:00:00")
-                {
-					IsTimeLeft = false;
-                }
-                else
-                {
-					IsTimeLeft = true;
-                }
-			}
+				timerThread.Start();
 
-			/*public void StopTimer(int numberOfQuestionsLeft)
+				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
+				if (DateTime.Now < whenToStop)
+				{
+					IsTimeLeft = true;
+				}
+				else
+				{
+					IsTimeLeft = false;
+				}
+			}
+            /*
+            public void StopTimer(int numberOfQuestionsLeft)
 			{
 				if (numberOfQuestionsLeft == 0)
 				{
-					thread.Abort();
+					timerThread.Abort();
 				}
-			}*/
-
+			}
+            */
 			public static string ReadInput()
 			{
 				string input = Console.ReadLine();
@@ -233,10 +232,9 @@ namespace mathstester
 			Random random = new Random();
 			var (operationMin, operationMax) = GetPossibleOperationsByDifficulty(userDifficulty);
 			var score = new OperationQuestionScore();
+			RunWithTimer RunWithTimer = new RunWithTimer(numberOfSeconds);
 
-			RunWithTimer runWithTimer = new RunWithTimer(numberOfSeconds);
-
-			while (numberOfQuestionsLeft > 0 && runWithTimer.IsTimeLeft)
+			while (numberOfQuestionsLeft > 0 && RunWithTimer.IsTimeLeft)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
 				MathOperation mathOperation = (MathOperation)mathRandomOperation;
