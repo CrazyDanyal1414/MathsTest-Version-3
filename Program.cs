@@ -156,7 +156,7 @@ namespace mathstester
 
 		class RunWithTimer
 		{
-			public bool IsTimeLeft { get; } = false;
+			public bool IsTimeLeft { get; } = true;
 			public static void Timer(int numberOfSeconds)
 			{
 			    var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
@@ -176,10 +176,10 @@ namespace mathstester
 				{
 					Timer(numberOfSeconds);
 				}));
-				while (DateTime.Now < whenToStop)
+				timerThread.Start();
+				while (DateTime.Now == whenToStop)
 				{
-					timerThread.Start();
-					IsTimeLeft = true;
+					IsTimeLeft = false;
 				}
 			}
             public void StopTimer(int numberOfQuestionsLeft)
