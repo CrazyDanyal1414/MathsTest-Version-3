@@ -156,7 +156,7 @@ namespace mathstester
 
 		class RunWithTimer
 		{
-			public bool IsTimeLeft { get; }
+			public bool IsTimeLeft { get; } = false;
 			public static void Timer(int numberOfSeconds)
 			{
 			    var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
@@ -168,22 +168,18 @@ namespace mathstester
 				}
 			}
 
-			Thread timerThread;
+            readonly Thread timerThread;
 			public RunWithTimer(int numberOfSeconds)
 			{
+				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
 				timerThread = new Thread(new ThreadStart(() =>
 				{
 					Timer(numberOfSeconds);
 				}));
-				timerThread.Start();
-				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
-				if (DateTime.Now < whenToStop)
+				while (DateTime.Now < whenToStop)
 				{
+					timerThread.Start();
 					IsTimeLeft = true;
-				}
-				else
-				{
-					IsTimeLeft = false;
 				}
 			}
             public void StopTimer(int numberOfQuestionsLeft)
