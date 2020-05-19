@@ -157,27 +157,30 @@ namespace mathstester
 		class RunWithTimer
 		{
 			public bool IsTimeLeft { get; } = true;
-			public static void Timer(int numberOfSeconds)
+			public static string Timer(int numberOfSeconds)
 			{
 			    var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
+				string timeLeft = "";
 				while (DateTime.Now < whenToStop)
 				{
-					string timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
+					timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
 					WriteToScreen($"Time Remaining: {timeLeft}", true);
 					Thread.Sleep(1000);
 				}
+				return timeLeft;
 			}
 
             readonly Thread timerThread;
 			public RunWithTimer(int numberOfSeconds)
 			{
 				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
+				string timeLeft = "";
 				timerThread = new Thread(new ThreadStart(() =>
 				{
-					Timer(numberOfSeconds);
+					timeLeft = Timer(numberOfSeconds);
 				}));
 				timerThread.Start();
-				while (DateTime.Now == whenToStop)
+				while (timeLeft == "00:00:00")
 				{
 					IsTimeLeft = false;
 				}
@@ -304,7 +307,7 @@ namespace mathstester
 			{
 				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 30!");
 				int.TryParse(Console.ReadLine(), out numberOfSeconds);
-			} while (numberOfSeconds % 30 != 0);
+			} while (numberOfSeconds % 10 != 0);
 
 			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
 		}
