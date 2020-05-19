@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 
+
 namespace mathstester
 {
 	class Program
@@ -157,33 +158,26 @@ namespace mathstester
 		class RunWithTimer
 		{
 			public bool IsTimeLeft { get; } = true;
-			public static string Timer(int numberOfSeconds)
+			public static void Timer(int numberOfSeconds)
 			{
 			    var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
-				string timeLeft = "";
 				while (DateTime.Now < whenToStop)
 				{
-					timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
+					string timeLeft = (whenToStop - DateTime.Now).ToString(@"hh\:mm\:ss");
 					WriteToScreen($"Time Remaining: {timeLeft}", true);
 					Thread.Sleep(1000);
 				}
-				return timeLeft;
 			}
 
-            readonly Thread timerThread;
+            public Thread timerThread;
 			public RunWithTimer(int numberOfSeconds)
 			{
-				var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
-				string timeLeft = "";
 				timerThread = new Thread(new ThreadStart(() =>
 				{
-					timeLeft = Timer(numberOfSeconds);
+					Timer(numberOfSeconds);
+					timerThread = null;
 				}));
 				timerThread.Start();
-				while (timeLeft == "00:00:00")
-				{
-					IsTimeLeft = false;
-				}
 			}
             public void StopTimer(int numberOfQuestionsLeft)
 			{
@@ -231,7 +225,7 @@ namespace mathstester
 			var score = new OperationQuestionScore();
 			RunWithTimer RunWithTimer = new RunWithTimer(numberOfSeconds);
 
-			while (numberOfQuestionsLeft > 0 && RunWithTimer.IsTimeLeft)
+			while (numberOfQuestionsLeft > 0 && RunWithTimer.timerThread != null)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
 				MathOperation mathOperation = (MathOperation)mathRandomOperation;
@@ -307,7 +301,7 @@ namespace mathstester
 			{
 				Console.WriteLine("How many seconds would you like the test to be? Please type a number divisible by 30!");
 				int.TryParse(Console.ReadLine(), out numberOfSeconds);
-			} while (numberOfSeconds % 10 != 0);
+			} while (numberOfSeconds % 30 != 0);
 
 			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
 		}
