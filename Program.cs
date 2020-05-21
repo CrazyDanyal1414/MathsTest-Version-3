@@ -157,7 +157,7 @@ namespace mathstester
 
 		class RunWithTimer
 		{
-			public bool IsTimeLeft { get; } = true;
+			public bool IsTimeLeft { get; private set; } = true;
 			public static void Timer(int numberOfSeconds)
 			{
 			    var whenToStop = DateTime.Now.AddSeconds(numberOfSeconds);
@@ -176,6 +176,10 @@ namespace mathstester
 				{
 					Timer(numberOfSeconds);
 					timerThread = null;
+					if (timerThread == null)
+                    {
+						IsTimeLeft = false;
+                    }
 				}));
 				timerThread.Start();
 			}
@@ -225,7 +229,7 @@ namespace mathstester
 			var score = new OperationQuestionScore();
 			RunWithTimer RunWithTimer = new RunWithTimer(numberOfSeconds);
 
-			while (numberOfQuestionsLeft > 0 && RunWithTimer.timerThread != null)
+			while (numberOfQuestionsLeft > 0 && RunWithTimer.IsTimeLeft)
 			{
 				int mathRandomOperation = random.Next(operationMin, operationMax);
 				MathOperation mathOperation = (MathOperation)mathRandomOperation;
@@ -243,7 +247,7 @@ namespace mathstester
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.ForegroundColor = ConsoleColor.Green;
-					RunWithTimer.WriteToScreen("Well Done!", false);
+                    RunWithTimer.WriteToScreen("Well Done!", false);
 					Console.ResetColor();
 					score.Increment(mathOperation, true);
 				}
