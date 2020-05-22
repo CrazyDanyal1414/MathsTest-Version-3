@@ -27,13 +27,13 @@ namespace mathstester
 			{
 				ToFile obj = new ToFile(numberOfQuestions, userDifficulty, totalScore);
 				IFormatter formatter = new BinaryFormatter();
-				Stream stream = new FileStream("D:\\Example.txt", FileMode.Create, FileAccess.Write);
+				Stream stream = new FileStream("LastTest.txt", FileMode.Create, FileAccess.Write);
 				formatter.Serialize(stream, obj);
 				stream.Close();
 			}
 			public static ToFile Deserialize()
 			{
-				Stream stream = new FileStream("D:\\Example.txt", FileMode.Open, FileAccess.Read);
+				Stream stream = new FileStream("LastTest.txt", FileMode.Open, FileAccess.Read);
 				IFormatter formatter = new BinaryFormatter();
 				ToFile objnew = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
