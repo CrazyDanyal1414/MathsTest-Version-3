@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using static mathstester.Calculation;
-using static mathstester.SaveLastTest;
+using static mathstester.SaveAndUseLastTestResults;
 
 namespace mathstester
 {

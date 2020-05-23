@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace mathstester
 {
-	public class SaveLastTest
+	public class SaveAndUseLastTestResults
     {
 		[Serializable]
 		public class ToFile
