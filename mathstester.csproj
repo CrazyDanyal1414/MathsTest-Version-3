@@ -241,6 +241,7 @@
     <Compile Include="Timer.cs" />
     <Compile Include="Calculation.cs" />
     <Compile Include="SaveToFile.cs" />
+    <Compile Include="Printing.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />
