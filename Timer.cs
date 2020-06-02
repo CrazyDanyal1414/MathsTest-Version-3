@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using static mathstester.Printing;
+using static mathstester.UseManyTimes;
 
 namespace mathstester
 {

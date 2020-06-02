@@ -21,25 +21,25 @@ namespace mathstester
 				var (message, correctAnswer) = GetMathsEquation(mathOperation, userDifficulty);
 				if (mathRandomOperation == 4 || mathRandomOperation == 6)
 				{
-					Printing.WriteToScreen($"To the nearest integer, What is {message} =", false);
+					UseManyTimes.WriteToScreen($"To the nearest integer, What is {message} =", false);
 				}
 				else
 				{
-					Printing.WriteToScreen($"What is {message} =", false);
+					UseManyTimes.WriteToScreen($"What is {message} =", false);
 				}
 
-				double userAnswer = Convert.ToDouble(Printing.ReadInput());
+				double userAnswer = Convert.ToDouble(UseManyTimes.ReadInput());
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.ForegroundColor = ConsoleColor.Green;
-                    Printing.WriteToScreen("Well Done!", false);
+					UseManyTimes.WriteToScreen("Well Done!", false);
 					Console.ResetColor();
 					score.Increment(mathOperation, true);
 				}
 				else
 				{
 					Console.ForegroundColor = ConsoleColor.Red;
-					Printing.WriteToScreen("Your answer is incorrect!", false);
+					UseManyTimes.WriteToScreen("Your answer is incorrect!", false);
 					Console.ResetColor();
 					score.Increment(mathOperation, false);
 				}
@@ -95,69 +95,9 @@ namespace mathstester
 			return (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds);
 		}
 
-		public static UserDifficulty SuggestingDifficulty()
-		{
-            ToFile objnew = SaveToFile.Deserialize();
-			UserDifficulty userDifficulty = UserDifficulty.Easy;
-
-			Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");
-			double decimalScore = (double)objnew.TotalScore / (double)objnew.NumberOfQuestions;
-
-			if (objnew.UserDifficulty == UserDifficulty.Easy)
-			{
-				if (decimalScore <= 0.7)
-				{
-					Console.WriteLine($"You should stay on Easy difficulty");
-					userDifficulty = UserDifficulty.Easy;
-				}
-				else
-				{
-					Console.WriteLine($"Easy difficulty seems to easy for you💪! You should go up to Normal difficulty");
-					userDifficulty = UserDifficulty.Normal;
-				}
-			}
-			else if (objnew.UserDifficulty == UserDifficulty.Normal)
-			{
-				if (decimalScore <= 0.3)
-				{
-					Console.WriteLine($"Normal difficulty seems to be to hard for you☹️. You should go down to Easy difficulty");
-					userDifficulty = UserDifficulty.Easy;
-				}
-				else if ((decimalScore > 0.3) && (decimalScore <= 0.7))
-				{
-					Console.WriteLine($"You should stay on Normal difficulty");
-					userDifficulty = UserDifficulty.Normal;
-				}
-				else
-				{
-					Console.WriteLine($"Normal difficulty seems to easy for you💪! You should go up to Hard difficulty");
-					userDifficulty = UserDifficulty.Hard;
-				}
-			}
-			else if (objnew.UserDifficulty == UserDifficulty.Hard)
-			{
-				if (decimalScore <= 0.3)
-				{
-					Console.WriteLine($"Hard difficulty seems to hard for you☹️. You should go down to Normal difficulty");
-					userDifficulty = UserDifficulty.Normal;
-				}
-				else if ((decimalScore > 0.3) && (decimalScore <= 0.8))
-				{
-					Console.WriteLine($"You should stay on Hard difficulty");
-					userDifficulty = UserDifficulty.Hard;
-				}
-				else
-				{
-					Console.WriteLine($"You are a maths Genius🥳! Sadly this is the hardest level");
-					userDifficulty = UserDifficulty.Hard;
-				}
-			}
-			return userDifficulty;
-		}
-
 		public static void Main(string[] args)
 	    {
-			UserDifficulty userSuggestingDifficulty = SuggestingDifficulty();
+			UserDifficulty userSuggestingDifficulty = UseManyTimes.SuggestingDifficulty();
             var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
 
 			if (autoDifficultyInput == "Y")
