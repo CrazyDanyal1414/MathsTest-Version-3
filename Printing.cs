@@ -3,7 +3,7 @@ using static mathstester.SaveLastTestResults;
 
 namespace mathstester
 {
-    public class UseManyTimes
+    public class CanUseManyTimes
     {
 		public static string ReadInput()
 		{

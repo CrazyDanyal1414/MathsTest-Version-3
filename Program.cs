@@ -22,25 +22,25 @@ namespace mathstester
 				var (message, correctAnswer) = GetMathsEquation(mathOperation, userDifficulty);
 				if (mathRandomOperation == 4 || mathRandomOperation == 6)
 				{
-					UseManyTimes.WriteToScreen($"To the nearest integer, What is {message} =", false);
+					CanUseManyTimes.WriteToScreen($"To the nearest integer, What is {message} =", false);
 				}
 				else
 				{
-					UseManyTimes.WriteToScreen($"What is {message} =", false);
+					CanUseManyTimes.WriteToScreen($"What is {message} =", false);
 				}
 
-				double userAnswer = Convert.ToDouble(UseManyTimes.ReadInput());
+				double userAnswer = Convert.ToDouble(CanUseManyTimes.ReadInput());
 				if (Math.Round(correctAnswer) == userAnswer)
 				{
 					Console.ForegroundColor = ConsoleColor.Green;
-					UseManyTimes.WriteToScreen("Well Done!", false);
+					CanUseManyTimes.WriteToScreen("Well Done!", false);
 					Console.ResetColor();
 					score.Increment(mathOperation, true);
 				}
 				else
 				{
 					Console.ForegroundColor = ConsoleColor.Red;
-					UseManyTimes.WriteToScreen("Your answer is incorrect!", false);
+					CanUseManyTimes.WriteToScreen("Your answer is incorrect!", false);
 					Console.ResetColor();
 					score.Increment(mathOperation, false);
 				}
@@ -98,9 +98,6 @@ namespace mathstester
 
 		public static void Main(string[] args)
 	    {
-			var UsersList = new Users[]
-			{
-			};
 			Console.WriteLine("To Login Type 1, To SignUp Type 2");
 			int LogInOrSignUp;
 			do
@@ -140,13 +137,11 @@ namespace mathstester
 					Console.WriteLine("Enter a password:");
 					password = Console.ReadLine();
 
-					Array.Resize(ref UsersList, UsersList.Length + 1);
-					UsersList[UsersList.Length - 1] = new Users(userName, password);
 					successfull = true;
 					SaveToFile.SerializeSignUpDetails(userName, password);
 				}
 			}
-			UserDifficulty userSuggestingDifficulty = UseManyTimes.SuggestingDifficulty();
+			UserDifficulty userSuggestingDifficulty = CanUseManyTimes.SuggestingDifficulty();
             var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
 
 			if (autoDifficultyInput == "Y")

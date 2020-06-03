@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using static mathstester.UseManyTimes;
+using static mathstester.CanUseManyTimes;
 
 namespace mathstester
 {
