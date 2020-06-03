@@ -1997,6 +1997,21 @@
             <param name="thickness">The thickness.</param>
             <returns>The bool.</returns>
         </member>
+        <member name="T:Syncfusion.XForms.Core.ThreadHelper">
+            <summary>
+            Helper class to identify the Main thread.
+            </summary>
+        </member>
+        <member name="P:Syncfusion.XForms.Core.ThreadHelper.MainThreadId">
+            <summary>
+            Gets or sets the main thread ID.
+            </summary>
+        </member>
+        <member name="P:Syncfusion.XForms.Core.ThreadHelper.IsOnMainThread">
+            <summary>
+            Gets if the current thread is the main UI thread.
+            </summary>
+        </member>
         <member name="T:Syncfusion.XForms.Core.IMeasureTextSize">
             <summary>
             Interface defines the method must be implemented to get string width for the given label properties. 

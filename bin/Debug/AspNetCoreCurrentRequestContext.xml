@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AspNetCoreCurrentRequestContext</name>
+    </assembly>
+    <members>
+        <member name="T:AspNetCoreCurrentRequestContext.AspNetCoreHttpContext">
+            <summary>
+            The class that manages <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/> in the current request.
+            </summary>
+        </member>
+        <member name="P:AspNetCoreCurrentRequestContext.AspNetCoreHttpContext.Current">
+            <summary>
+            Get <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/> in this request.
+            </summary>
+        </member>
+        <member name="T:AspNetCoreCurrentRequestContext.CurrentRequestContextMiddleware">
+            <summary>
+            Enable using <see cref="P:AspNetCoreCurrentRequestContext.AspNetCoreHttpContext.Current"/>. 
+            </summary>
+        </member>
+        <member name="M:AspNetCoreCurrentRequestContext.CurrentRequestContextMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Create a new instance of <see cref="T:AspNetCoreCurrentRequestContext.CurrentRequestContextMiddleware"/>.
+            </summary>
+            <param name="next">The next middleware in the pipeline.</param>
+        </member>
+        <member name="M:AspNetCoreCurrentRequestContext.CurrentRequestContextMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Execute the application's request pipeline.
+            </summary>
+            <param name="context"><see cref="T:Microsoft.AspNetCore.Http.HttpContext"/> in this request.</param>
+            <returns>The task.</returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Builder.ApplicationBuilderExtensions">
+            <summary>
+            Extensions of <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Builder.ApplicationBuilderExtensions.UseCurrentRequestContext(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Enable <see cref="P:AspNetCoreCurrentRequestContext.AspNetCoreHttpContext.Current"/> in the current request with adding <see cref="T:AspNetCoreCurrentRequestContext.CurrentRequestContextMiddleware"/> to the application's request pipeline.
+            </summary>
+            <param name="builder">The application's request pipeline.</param>
+            <returns>The application's request pipeline added <see cref="T:AspNetCoreCurrentRequestContext.CurrentRequestContextMiddleware"/>.</returns>
+        </member>
+    </members>
+</doc>

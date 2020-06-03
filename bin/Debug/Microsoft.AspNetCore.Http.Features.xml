@@ -558,7 +558,7 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Http.CookieOptions.SameSite">
             <summary>
-            Gets or sets the value for the SameSite attribute of the cookie. The default value is <see cref="F:Microsoft.AspNetCore.Http.SameSiteMode.None"/>
+            Gets or sets the value for the SameSite attribute of the cookie. The default value is <see cref="F:Microsoft.AspNetCore.Http.SameSiteMode.Unspecified"/>
             </summary>
             <returns>The <see cref="T:Microsoft.AspNetCore.Http.SameSiteMode"/> representing the enforcement mode of the cookie.</returns>
         </member>
@@ -1022,11 +1022,14 @@
         <member name="T:Microsoft.AspNetCore.Http.SameSiteMode">
             <summary>
             Used to set the SameSite field on response cookies to indicate if those cookies should be included by the client on future "same-site" or "cross-site" requests.
-            RFC Draft: https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site-00
+            RFC Draft: https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-03#section-4.1.1
             </summary>
         </member>
-        <member name="F:Microsoft.AspNetCore.Http.SameSiteMode.None">
+        <member name="F:Microsoft.AspNetCore.Http.SameSiteMode.Unspecified">
             <summary>No SameSite field will be set, the client should follow its default cookie policy.</summary>
+        </member>
+        <member name="F:Microsoft.AspNetCore.Http.SameSiteMode.None">
+            <summary>Indicates the client should disable same-site restrictions.</summary>
         </member>
         <member name="F:Microsoft.AspNetCore.Http.SameSiteMode.Lax">
             <summary>Indicates the client should send the cookie with "same-site" requests, and with "cross-site" top-level navigations.</summary>

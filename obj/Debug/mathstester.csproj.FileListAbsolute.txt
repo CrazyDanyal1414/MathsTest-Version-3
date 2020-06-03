@@ -124,3 +124,14 @@
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Xaml.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Syncfusion.Core.XForms.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/obj/Debug/XamlC.stamp
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/AspNetCoreCurrentRequestContext.dll
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Microsoft.AspNetCore.Http.Abstractions.dll
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Microsoft.Net.Http.Headers.dll
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Serilog.dll
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Serilog.Enrichers.HttpContextData.dll
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Serilog.Enrichers.HttpContextInfo.dll
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Reflection.TypeExtensions.xml
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Serilog.xml
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Microsoft.Net.Http.Headers.xml
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Microsoft.AspNetCore.Http.Abstractions.xml
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/AspNetCoreCurrentRequestContext.xml

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using static mathstester.Calculation;
 using static mathstester.SaveLastTestResults;
 
+
 namespace mathstester
 {
-	class Program
+    class Program
 	{
 		public static OperationQuestionScore RunTest(int numberOfQuestionsLeft, UserDifficulty userDifficulty, int numberOfSeconds)
 		{
@@ -51,7 +52,7 @@ namespace mathstester
 
 		static (UserDifficulty, int, string, int) UserInputs()
 		{
-            Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>
+			Dictionary<string, UserDifficulty> difficultyDictionary = new Dictionary<string, UserDifficulty>
             {
                 { "E", UserDifficulty.Easy },
                 { "N", UserDifficulty.Normal },
@@ -97,6 +98,54 @@ namespace mathstester
 
 		public static void Main(string[] args)
 	    {
+			var UsersList = new Users[]
+			{
+			};
+			Console.WriteLine("To Login Type 1, To SignUp Type 2");
+			int LogInOrSignUp;
+			do
+			{
+				int.TryParse(Console.ReadLine(), out LogInOrSignUp);
+			} while (LogInOrSignUp != 1 && LogInOrSignUp != 2);
+
+			string userName = "";
+			string password = "";
+			bool successfull = false;
+			Users userDetails = SaveToFile.DeserializeSignUpDetails();
+			while (!successfull)
+			{
+				if (LogInOrSignUp == 1)
+				{
+					Console.WriteLine("Write your username:");
+					userName = Console.ReadLine();
+					Console.WriteLine("Enter your password:");
+					password = Console.ReadLine();
+					if (userName == userDetails.UserName && password == userDetails.Password)
+					{
+						Console.WriteLine("You have logged in successfully!");
+						successfull = true;
+						break;
+					}
+					if (!successfull)
+					{
+						Console.WriteLine("Your username or password is incorect, try again!");
+					}
+				}
+
+				else if (LogInOrSignUp == 2)
+				{
+					Console.WriteLine("Enter a username:");
+					userName = Console.ReadLine();
+
+					Console.WriteLine("Enter a password:");
+					password = Console.ReadLine();
+
+					Array.Resize(ref UsersList, UsersList.Length + 1);
+					UsersList[UsersList.Length - 1] = new Users(userName, password);
+					successfull = true;
+					SaveToFile.SerializeSignUpDetails(userName, password);
+				}
+			}
 			UserDifficulty userSuggestingDifficulty = UseManyTimes.SuggestingDifficulty();
             var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
 
@@ -129,7 +178,7 @@ namespace mathstester
                 Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
 				Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
 			}
-		    SaveToFile.Serialize(numberOfQuestions, score.TotalScore, userDifficulty);
+		    SaveToFile.SerializeLastTest(numberOfQuestions, score.TotalScore, userDifficulty);
 		}
 	}
 }

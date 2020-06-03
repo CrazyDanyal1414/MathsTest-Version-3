@@ -139,6 +139,9 @@
         <member name="M:Microsoft.Extensions.DependencyInjection.ServiceProvider.Dispose">
             <inheritdoc />
         </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceProvider.DisposeAsync">
+            <inheritdoc/>
+        </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceProviderOptions">
             <summary>
             Options for configuring various behaviors of the default <see cref="T:System.IServiceProvider"/> implementation.
