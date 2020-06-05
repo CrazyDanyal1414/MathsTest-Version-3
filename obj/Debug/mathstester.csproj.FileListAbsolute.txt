@@ -89,11 +89,9 @@
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Microsoft.AspNetCore.Connections.Abstractions.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Threading.Channels.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.ValueTuple.xml
-/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Orleans.Core.pdb
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Orleans.Core.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Orleans.Runtime.Abstractions.pdb
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Orleans.Runtime.Abstractions.xml
-/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Orleans.Runtime.pdb
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Orleans.Runtime.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/OrleansProviders.pdb
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/OrleansProviders.xml
@@ -116,10 +114,8 @@
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Core.dll
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Platform.dll
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Xaml.dll
-/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Reactive.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Reactive.Windows.Forms.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Core.pdb
-/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Core.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Xaml.pdb
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Xaml.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Syncfusion.Core.XForms.xml
@@ -135,3 +131,5 @@
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Microsoft.Net.Http.Headers.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Microsoft.AspNetCore.Http.Abstractions.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/AspNetCoreCurrentRequestContext.xml
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Diagnostics.TextWriterTraceListener.dll
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Diagnostics.TraceSource.dll

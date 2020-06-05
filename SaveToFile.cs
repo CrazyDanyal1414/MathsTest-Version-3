@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -24,14 +25,16 @@ namespace mathstester
 		[Serializable]
 		public class Users
 		{
-			public string UserName;
-			public string Password;
+			public string UserName { get; set; }
+			public string Password { get; set; }
 
 			public Users(string userName, string password)
 			{
 				UserName = userName;
 				Password = password;
 			}
+
+			public override string ToString() => $"{UserName}, {Password}";
 		}
 
 		public class SaveToFile
@@ -56,17 +59,27 @@ namespace mathstester
 			{
 				Users obj = new Users(userName, password);
 				IFormatter formatter = new BinaryFormatter();
-				Stream stream = new FileStream("SignUp.txt", FileMode.Create, FileAccess.Write);
+				Stream stream = new FileStream("SignUp.txt", FileMode.Append, FileAccess.Write);
 				formatter.Serialize(stream, obj);
 				stream.Close();
 			}
-			public static Users DeserializeSignUpDetails()
+			public static List<Users> DeserializeSignUpDetails()
 			{
-				Stream stream = new FileStream("SignUp.txt", FileMode.Open, FileAccess.Read);
-				IFormatter formatter = new BinaryFormatter();
-				Users objnew = (Users)formatter.Deserialize(stream);
-				stream.Close();
-				return objnew;
+				List<Users> users = new List<Users>();
+
+				using (Stream stream = new FileStream("SignUp.txt", FileMode.Open, FileAccess.Read))
+				{
+					if (stream.Length != 0)
+					{
+						IFormatter formatter = new BinaryFormatter();
+						while (stream.Position != stream.Length)
+						{
+							users.Add((Users)formatter.Deserialize(stream));
+						}
+						return users;
+					}
+				}
+				return users;
 			}
 		}
 	}

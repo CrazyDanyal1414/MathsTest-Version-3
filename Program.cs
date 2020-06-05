@@ -99,44 +99,45 @@ namespace mathstester
 
 		public static void Main(string[] args)
 	    {
-			Console.WriteLine("To Login Type 1, To SignUp Type 2");
+			List<Users> userDetails = SaveToFile.DeserializeSignUpDetails();
+			Console.WriteLine("To Login Type 1, To Create a new account Type 2");
 			int LogInOrSignUp;
 			do
 			{
 				int.TryParse(Console.ReadLine(), out LogInOrSignUp);
 			} while (LogInOrSignUp != 1 && LogInOrSignUp != 2);
 
-			string userName = "";
-			string password = "";
 			bool successfull = false;
-			Users userDetails = SaveToFile.DeserializeSignUpDetails();
 			while (!successfull)
 			{
 				if (LogInOrSignUp == 1)
 				{
 					Console.WriteLine("Write your username:");
-					userName = Console.ReadLine();
+					string userName = Console.ReadLine();
 					Console.WriteLine("Enter your password:");
-					password = Console.ReadLine();
-					if (userName == userDetails.UserName && password == userDetails.Password)
+					string password = Console.ReadLine();
+					foreach (Users user in userDetails)
 					{
-						Console.WriteLine("You have logged in successfully!");
-						successfull = true;
-						break;
-					}
-					if (!successfull)
-					{
-						Console.WriteLine("Your username or password is incorect, try again!");
+						if (userName == user.UserName && password == user.Password)
+						{
+							Console.WriteLine("You have logged in successfully!");
+							successfull = true;
+							break;
+						}
+						if (!successfull)
+						{
+							Console.WriteLine("Your username or password is incorect, try again!");
+						}
 					}
 				}
 
 				else if (LogInOrSignUp == 2)
 				{
 					Console.WriteLine("Enter a username:");
-					userName = Console.ReadLine();
+					string userName = Console.ReadLine();
 
 					Console.WriteLine("Enter a password:");
-					password = Console.ReadLine();
+					string password = Console.ReadLine();
 
 					successfull = true;
 					SaveToFile.SerializeSignUpDetails(userName, password);

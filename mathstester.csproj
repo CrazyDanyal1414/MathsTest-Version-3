@@ -253,6 +253,12 @@
     <Reference Include="AspNetCoreCurrentRequestContext">
       <HintPath>..\packages\AspNetCoreCurrentRequestContext.2.0.0\lib\net46\AspNetCoreCurrentRequestContext.dll</HintPath>
     </Reference>
+    <Reference Include="System.Diagnostics.TraceSource">
+      <HintPath>..\packages\System.Diagnostics.TraceSource.4.3.0\lib\net46\System.Diagnostics.TraceSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.TextWriterTraceListener">
+      <HintPath>..\packages\System.Diagnostics.TextWriterTraceListener.4.3.0\lib\net46\System.Diagnostics.TextWriterTraceListener.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
