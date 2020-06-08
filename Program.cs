@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using static mathstester.Calculation;
 using static mathstester.SaveLastTestResults;
+using static mathstester.UserLogin;
 
 
 namespace mathstester
@@ -99,7 +100,6 @@ namespace mathstester
 
 		public static void Main(string[] args)
 	    {
-			List<Users> userDetails = SaveToFile.DeserializeSignUpDetails();
 			Console.WriteLine("To Login Type 1, To Create a new account Type 2");
 			int LogInOrSignUp;
 			do
@@ -107,40 +107,50 @@ namespace mathstester
 				int.TryParse(Console.ReadLine(), out LogInOrSignUp);
 			} while (LogInOrSignUp != 1 && LogInOrSignUp != 2);
 
-			bool successfull = false;
+			var filePath = Path.Combine(AppContext.BaseDirectory, "AccountDetails.txt");
+			var userName = "";
+			var password = "";
+			var successfull = false;
+			var userDetails = Users.DeserializeAccountDetails(filePath);
+
+			if (userDetails is null)
+				userDetails = new Users();
+
 			while (!successfull)
 			{
 				if (LogInOrSignUp == 1)
 				{
 					Console.WriteLine("Write your username:");
-					string userName = Console.ReadLine();
+					userName = Console.ReadLine();
 					Console.WriteLine("Enter your password:");
-					string password = Console.ReadLine();
-					foreach (Users user in userDetails)
+					password = Console.ReadLine();
+					if (userDetails.ContainsAccount(userName, password))
 					{
-						if (userName == user.UserName && password == user.Password)
-						{
-							Console.WriteLine("You have logged in successfully!");
-							successfull = true;
-							break;
-						}
-						if (!successfull)
-						{
-							Console.WriteLine("Your username or password is incorect, try again!");
-						}
+						Console.WriteLine("You have logged in successfully!");
+						successfull = true;
+						break;
 					}
+					else
+						Console.WriteLine("Your username or password is incorect, try again!");
 				}
 
-				else if (LogInOrSignUp == 2)
+				else
 				{
 					Console.WriteLine("Enter a username:");
-					string userName = Console.ReadLine();
+					userName = Console.ReadLine();
 
-					Console.WriteLine("Enter a password:");
-					string password = Console.ReadLine();
+					if (userDetails.ContainsUserName(userName))
+						Console.WriteLine("The username is taken. Try another one.");
+					else
+					{
+						Console.WriteLine("Enter a password:");
+						password = Console.ReadLine();
 
-					successfull = true;
-					SaveToFile.SerializeSignUpDetails(userName, password);
+						successfull = true;
+						userDetails.AddAccountDetails(userName, password);
+						userDetails.SerializeAccountDetails(filePath);
+						Console.WriteLine($"A new account for {userName} has been created.");
+					}
 				}
 			}
 			UserDifficulty userSuggestingDifficulty = CanUseManyTimes.SuggestingDifficulty();
