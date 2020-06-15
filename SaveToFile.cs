@@ -35,11 +35,11 @@ namespace mathstester
 			}
 			public static ToFile DeserializeLastTest(string userName)
 			{
-				Stream stream = new FileStream($"{userName}.txt", FileMode.Open, FileAccess.Read);
-				IFormatter formatter = new BinaryFormatter();
-				ToFile objnew = (ToFile)formatter.Deserialize(stream);
-				stream.Close();
-				return objnew;
+					Stream stream = new FileStream($"{userName}.txt", FileMode.Open, FileAccess.Read);
+					IFormatter formatter = new BinaryFormatter();
+					ToFile objnew = (ToFile)formatter.Deserialize(stream);
+					stream.Close();
+					return objnew;
 			}
 		}
 	}

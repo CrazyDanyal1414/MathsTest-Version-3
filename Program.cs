@@ -152,17 +152,24 @@ namespace mathstester
 						successfull = true;
 						userDetails.AddAccountDetails(userName, password);
 						userDetails.SerializeAccountDetails(filePath);
-						Console.WriteLine($"A new account for {userName} has been created. Please login now!");
+						Console.WriteLine($"A new account for {userName} has been created!");
 					}
 				}
 			}
 
-			UserDifficulty userSuggestingDifficulty = CanUseManyTimes.SuggestingDifficulty(userName);
+			UserDifficulty userSuggestingDifficulty = UserDifficulty.Easy;
+			if (File.Exists($"{userName}.txt"))
+			{
+				userSuggestingDifficulty = CanUseManyTimes.SuggestingDifficulty(userName);
+			}
             var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
 
-			if (autoDifficultyInput == "Y")
+            if (LogInOrSignUp == 2)
             {
-			    userDifficulty = userSuggestingDifficulty;
+				if (autoDifficultyInput == "Y")
+				{
+					userDifficulty = userSuggestingDifficulty;
+				}
 			}
 
 			var score = RunTest(numberOfQuestions, userDifficulty, numberOfSeconds);
