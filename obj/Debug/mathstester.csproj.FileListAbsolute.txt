@@ -133,3 +133,7 @@
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/AspNetCoreCurrentRequestContext.xml
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Diagnostics.TextWriterTraceListener.dll
 /Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Diagnostics.TraceSource.dll
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Orleans.Core.pdb
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Orleans.Runtime.pdb
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/System.Reactive.xml
+/Users/danyalqureshi/Documents/mathstester/mathstester/bin/Debug/Xamarin.Forms.Core.xml

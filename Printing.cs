@@ -36,9 +36,9 @@ namespace mathstester
 			}
 		}
 
-		public static UserDifficulty SuggestingDifficulty()
+		public static UserDifficulty SuggestingDifficulty(string userName)
 		{
-			ToFile objnew = SaveToFile.DeserializeLastTest();
+			ToFile objnew = SaveToFile.DeserializeLastTest(userName);
 			UserDifficulty userDifficulty = UserDifficulty.Easy;
 
 			Console.WriteLine($"Last time you did the test on {objnew.UserDifficulty} level and got {objnew.TotalScore}/{objnew.NumberOfQuestions}");

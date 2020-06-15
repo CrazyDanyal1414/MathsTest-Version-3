@@ -131,16 +131,19 @@ namespace mathstester
 						break;
 					}
 					else
+					{
 						Console.WriteLine("Your username or password is incorect, try again!");
+					}
 				}
-
 				else
 				{
 					Console.WriteLine("Enter a username:");
 					userName = Console.ReadLine();
 
 					if (userDetails.ContainsUserName(userName))
+					{
 						Console.WriteLine("The username is taken. Try another one.");
+					}
 					else
 					{
 						Console.WriteLine("Enter a password:");
@@ -149,11 +152,12 @@ namespace mathstester
 						successfull = true;
 						userDetails.AddAccountDetails(userName, password);
 						userDetails.SerializeAccountDetails(filePath);
-						Console.WriteLine($"A new account for {userName} has been created.");
+						Console.WriteLine($"A new account for {userName} has been created. Please login now!");
 					}
 				}
 			}
-			UserDifficulty userSuggestingDifficulty = CanUseManyTimes.SuggestingDifficulty();
+
+			UserDifficulty userSuggestingDifficulty = CanUseManyTimes.SuggestingDifficulty(userName);
             var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
 
 			if (autoDifficultyInput == "Y")
@@ -185,7 +189,7 @@ namespace mathstester
                 Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
 				Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
 			}
-		    SaveToFile.SerializeLastTest(numberOfQuestions, score.TotalScore, userDifficulty);
+		    SaveToFile.SerializeLastTest(numberOfQuestions, score.TotalScore, userDifficulty, userName);
 		}
 	}
 }

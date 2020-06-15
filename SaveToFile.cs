@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -23,17 +25,17 @@ namespace mathstester
 
 		public class SaveToFile
 		{
-			public static void SerializeLastTest(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty)
+			public static void SerializeLastTest(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty, string userName)
 			{
 				ToFile obj = new ToFile(numberOfQuestions, userDifficulty, totalScore);
 				IFormatter formatter = new BinaryFormatter();
-				Stream stream = new FileStream("LastTest.txt", FileMode.Create, FileAccess.Write);
+				Stream stream = new FileStream($"{userName}.txt", FileMode.Create, FileAccess.Write);
 				formatter.Serialize(stream, obj);
 				stream.Close();
 			}
-			public static ToFile DeserializeLastTest()
+			public static ToFile DeserializeLastTest(string userName)
 			{
-				Stream stream = new FileStream("LastTest.txt", FileMode.Open, FileAccess.Read);
+				Stream stream = new FileStream($"{userName}.txt", FileMode.Open, FileAccess.Read);
 				IFormatter formatter = new BinaryFormatter();
 				ToFile objnew = (ToFile)formatter.Deserialize(stream);
 				stream.Close();
