@@ -15,17 +15,17 @@ namespace mathstester
 			public int TotalScore { get; private set; }
 			public int NumberOfQuestions { get; }
 			public UserDifficulty UserDifficulty { get; }
-			public int TotalEasyQuestion { get; }
-			public int TotalEasyScore { get; }
-			public int TotalNormalQuestion { get; }
-			public int TotalNormalScore { get; }
-			public int TotalHardQuestion { get; }
-			public int TotalHardScore { get; }
-			public int EasyTests { get; }
-			public int NormalTests { get; }
-			public int HardTests { get; }
+			public double TotalEasyQuestion { get; }
+			public double TotalEasyScore { get; }
+			public double TotalNormalQuestion { get; }
+			public double TotalNormalScore { get; }
+			public double TotalHardQuestion { get; }
+			public double TotalHardScore { get; }
+			public double EasyTests { get; }
+			public double NormalTests { get; }
+			public double HardTests { get; }
 
-			public ToFile(int numberOfQuestions, UserDifficulty userDifficulty, int totalScore, int totalEasyQuestion, int totalEasyScore, int totalNormalQuestion, int totalNormalScore, int totalHardQuestion, int totalHardScore, int easyTests, int normalTests, int hardTests)
+			public ToFile(int numberOfQuestions, UserDifficulty userDifficulty, int totalScore, double totalEasyQuestion, double totalEasyScore, double totalNormalQuestion, double totalNormalScore, double totalHardQuestion, double totalHardScore, double easyTests, double normalTests, double hardTests)
 			{
 				NumberOfQuestions = numberOfQuestions;
 				UserDifficulty = userDifficulty;
@@ -44,7 +44,7 @@ namespace mathstester
 
 		public class SaveToFile
 		{
-			public static void SerializeLastTest(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty, string userName, int totalEasyQuestion, int totalEasyScore, int totalNormalQuestion, int totalNormalScore, int totalHardQuestion, int totalHardScore, int easyTests, int normalTests, int hardTests)
+			public static void SerializeLastTest(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty, string userName, double totalEasyQuestion, double totalEasyScore, double totalNormalQuestion, double totalNormalScore, double totalHardQuestion, double totalHardScore, double easyTests, double normalTests, double hardTests)
 			{
 				ToFile obj = new ToFile(numberOfQuestions, userDifficulty, totalScore, totalEasyQuestion, totalEasyScore, totalNormalQuestion, totalNormalScore, totalHardQuestion, totalHardScore, easyTests, normalTests, hardTests);
 				IFormatter formatter = new BinaryFormatter();

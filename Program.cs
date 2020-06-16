@@ -158,15 +158,15 @@ namespace mathstester
 			}
 
 			ToFile objnew = SaveToFile.DeserializeLastTest(userName);
-			int totalEasyQuestion = objnew.TotalEasyQuestion;
-			int totalEasyScore = objnew.TotalEasyScore;
-			int totalNormalQuestion = objnew.TotalNormalQuestion;
-			int totalNormalScore = objnew.TotalNormalScore;
-			int totalHardQuestion = objnew.TotalHardQuestion;
-			int totalHardScore = objnew.TotalHardScore;
-			int easyTests = objnew.EasyTests;
-			int normalTests = objnew.NormalTests;
-			int hardTests = objnew.HardTests;
+			double totalEasyQuestion = objnew.TotalEasyQuestion;
+			double totalEasyScore = objnew.TotalEasyScore;
+			double totalNormalQuestion = objnew.TotalNormalQuestion;
+			double totalNormalScore = objnew.TotalNormalScore;
+			double totalHardQuestion = objnew.TotalHardQuestion;
+			double totalHardScore = objnew.TotalHardScore;
+			double easyTests = objnew.EasyTests;
+			double normalTests = objnew.NormalTests;
+			double hardTests = objnew.HardTests;
 			UserDifficulty userSuggestingDifficulty = UserDifficulty.Easy;
 			if (File.Exists($"{userName}.txt"))
 			{
@@ -193,7 +193,7 @@ namespace mathstester
 				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
 				easyTests++;
 				totalEasyQuestion = totalEasyQuestion + numberOfQuestions;
-				totalEasyScore = (totalEasyScore + (score.TotalScore/numberOfQuestions)*100)/easyTests;
+				totalEasyScore = Math.Round((totalEasyScore + ((double)score.TotalScore/(double)numberOfQuestions)*100)/easyTests, 2);
 			}
 			else if (userDifficulty == UserDifficulty.Normal)
 			{
@@ -203,7 +203,7 @@ namespace mathstester
 				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
 				normalTests++;
 				totalNormalQuestion = totalNormalQuestion + numberOfQuestions;
-				totalNormalScore = (totalNormalScore + (score.TotalScore/numberOfQuestions)*100)/normalTests;
+				totalNormalScore = Math.Round((totalNormalScore + ((double)score.TotalScore/(double)numberOfQuestions)*100)/normalTests, 2);
 			}
             else if (userDifficulty == UserDifficulty.Hard)
 			{
@@ -213,7 +213,7 @@ namespace mathstester
 				Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
 				hardTests++;
 				totalHardQuestion = totalHardQuestion + numberOfQuestions;
-				totalHardScore = (totalHardScore + (score.TotalScore/numberOfQuestions)*100)/hardTests;
+				totalHardScore = Math.Round((totalHardScore + ((double)score.TotalScore/(double)numberOfQuestions)*100)/hardTests, 2);
 			}
 			string statisticsDisplay;
 			do
