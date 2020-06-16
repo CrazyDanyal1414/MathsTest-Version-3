@@ -268,7 +268,6 @@
     <Compile Include="SaveToFile.cs" />
     <Compile Include="Printing.cs" />
     <Compile Include="UserLoginSignUp.cs" />
-    <Compile Include="UserStatistics.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />
