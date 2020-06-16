@@ -157,6 +157,13 @@ namespace mathstester
 				}
 			}
 
+			ToFile objnew = SaveToFile.DeserializeLastTest(userName);
+			int totalEasyQuestion = objnew.TotalEasyQuestion;
+			int totalEasyScore = objnew.TotalEasyScore;
+			int totalNormalQuestion = objnew.TotalNormalQuestion;
+			int totalNormalScore = objnew.TotalNormalScore;
+			int totalHardQuestion = objnew.TotalHardQuestion;
+			int totalHardScore = objnew.TotalHardScore;
 			UserDifficulty userSuggestingDifficulty = UserDifficulty.Easy;
 			if (File.Exists($"{userName}.txt"))
 			{
@@ -164,7 +171,7 @@ namespace mathstester
 			}
             var (userDifficulty, numberOfQuestions, autoDifficultyInput, numberOfSeconds) = UserInputs();
 
-            if (LogInOrSignUp == 2)
+            if (LogInOrSignUp == 1)
             {
 				if (autoDifficultyInput == "Y")
 				{
@@ -181,6 +188,8 @@ namespace mathstester
 				Console.WriteLine($"Addition score: {score.AdditionScore} of {score.AdditionQuestion}");
                 Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
 				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
+				totalEasyQuestion = totalEasyQuestion + numberOfQuestions;
+				totalEasyScore = totalEasyScore + (score.TotalScore/numberOfQuestions)*100;
 			}
 			else if (userDifficulty == UserDifficulty.Normal)
 			{
@@ -188,6 +197,8 @@ namespace mathstester
 				Console.WriteLine($"Subtraction score: {score.SubtractionScore} of {score.SubtractionQuestion}");
 				Console.WriteLine($"Multiplication score: {score.MultiplicationScore} of {score.MultiplicationQuestion}");
 				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
+				totalNormalQuestion = totalNormalQuestion + numberOfQuestions;
+				totalNormalScore = totalNormalScore + (score.TotalScore/numberOfQuestions)*100;
 			}
             else if (userDifficulty == UserDifficulty.Hard)
 			{
@@ -195,8 +206,22 @@ namespace mathstester
 				Console.WriteLine($"Division score: {score.DivisionScore} of {score.DivisionQuestion}");
                 Console.WriteLine($"Power score: {score.PowerScore} of {score.PowerQuestion}");
 				Console.WriteLine($"Squareroot score: {score.SquareRootScore} of {score.SquareRootQuestion}");
+				totalHardQuestion = totalHardQuestion + numberOfQuestions;
+				totalHardScore = totalHardScore + (score.TotalScore/numberOfQuestions)*100;
 			}
-		    SaveToFile.SerializeLastTest(numberOfQuestions, score.TotalScore, userDifficulty, userName);
+			string statisticsDisplay;
+			do
+			{
+				Console.WriteLine("Would you like to see your all time statistics? Please type 'Y' or 'N'");
+				statisticsDisplay = Console.ReadLine();
+			} while (statisticsDisplay != "Y" && statisticsDisplay != "N");
+			if (statisticsDisplay == "Y")
+            {
+				Console.WriteLine($"You have answered {totalEasyQuestion} easy questions so far with an average score of {totalEasyScore}%");
+				Console.WriteLine($"You have answered {totalNormalQuestion} normal questions so far with an average score of {totalNormalScore}%");
+				Console.WriteLine($"You have answered {totalHardQuestion} hard questions so far with an average score of {totalHardScore}%");
+			}
+		    SaveToFile.SerializeLastTest(numberOfQuestions, score.TotalScore, userDifficulty, userName, totalEasyQuestion, totalEasyScore, totalNormalQuestion, totalNormalScore, totalHardQuestion, totalHardScore);
 		}
 	}
 }

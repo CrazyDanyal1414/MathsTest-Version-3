@@ -15,19 +15,31 @@ namespace mathstester
 			public int TotalScore { get; private set; }
 			public int NumberOfQuestions { get; }
 			public UserDifficulty UserDifficulty { get; }
-			public ToFile(int numberOfQuestions, UserDifficulty userDifficulty, int totalScore)
+			public int TotalEasyQuestion { get; }
+			public int TotalEasyScore { get; }
+			public int TotalNormalQuestion { get; }
+			public int TotalNormalScore { get; }
+			public int TotalHardQuestion { get; }
+			public int TotalHardScore { get; }
+			public ToFile(int numberOfQuestions, UserDifficulty userDifficulty, int totalScore, int totalEasyQuestion, int totalEasyScore, int totalNormalQuestion, int totalNormalScore, int totalHardQuestion, int totalHardScore)
 			{
 				NumberOfQuestions = numberOfQuestions;
 				UserDifficulty = userDifficulty;
 				TotalScore = totalScore;
+				TotalEasyQuestion = totalEasyQuestion;
+				TotalEasyScore = totalEasyScore;
+				TotalNormalQuestion = totalNormalQuestion;
+				TotalNormalScore = totalNormalScore;
+				TotalHardQuestion = totalHardQuestion;
+				TotalHardScore = totalHardScore;
 			}
 		}
 
 		public class SaveToFile
 		{
-			public static void SerializeLastTest(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty, string userName)
+			public static void SerializeLastTest(int numberOfQuestions, int totalScore, UserDifficulty userDifficulty, string userName, int totalEasyQuestion, int totalEasyScore, int totalNormalQuestion, int totalNormalScore, int totalHardQuestion, int totalHardScore)
 			{
-				ToFile obj = new ToFile(numberOfQuestions, userDifficulty, totalScore);
+				ToFile obj = new ToFile(numberOfQuestions, userDifficulty, totalScore, totalEasyQuestion, totalEasyScore, totalNormalQuestion, totalNormalScore, totalHardQuestion, totalHardScore);
 				IFormatter formatter = new BinaryFormatter();
 				Stream stream = new FileStream($"{userName}.txt", FileMode.Create, FileAccess.Write);
 				formatter.Serialize(stream, obj);
